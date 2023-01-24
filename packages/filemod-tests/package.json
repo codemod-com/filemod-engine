@@ -6,7 +6,7 @@
     "keywords": [],
     "author": "",
     "dependencies": {
-      "filemod": "workspace:*"
+      "@intuita/filemod": "workspace:filemod"
     },
     "devDependencies": {
       "@types/mocha": "^10.0.1",
