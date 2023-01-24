@@ -1,9 +1,10 @@
-import { unlink, writeFile } from 'fs/promises';
+import { mkdir, unlink, writeFile } from 'fs/promises';
 import { createReadStream, createWriteStream } from 'node:fs';
 import { register } from 'ts-node';
 import { API, Command, Transform } from './transform';
 import { pipeline } from 'node:stream';
 import fastGlob from 'fast-glob';
+import { dirname } from 'path';
 
 register({
     transpileOnly: true,
@@ -56,10 +57,14 @@ export const executeCommand = async (command: Command): Promise<void> => {
         }
 
         case 'move': {
-            await new Promise<void>((resolve, reject) => {
+            const dir = dirname(command.toPath);
+           
+            await mkdir(dir, { recursive: true });
+
+            await new Promise<void>((resolve, reject) => {            
                 pipeline(
                     createReadStream(command.fromPath),
-                    createWriteStream(command.toPath),
+                    createWriteStream(command.toPath, { flags: 'w+' }),
                     (err) => {
                         if (err) {
                             reject(err);

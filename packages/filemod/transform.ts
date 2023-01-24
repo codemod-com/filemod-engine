@@ -1,15 +1,13 @@
-import { PathLike } from "node:fs";
-
 export type Command = {
     kind: 'delete',
-    path: PathLike,
+    path: string,
 } | {
     kind: 'move',
-    fromPath: PathLike,
-    toPath: PathLike,
+    fromPath: string,
+    toPath: string,
 } | {
     kind: 'create',
-    path: PathLike,
+    path: string,
 }
 
 export type API = Readonly<{
