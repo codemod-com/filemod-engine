@@ -5,8 +5,11 @@ export type Command = {
     path: PathLike,
 } | {
     kind: 'move',
-    fromPath: string,
-    toPath: string,
+    fromPath: PathLike,
+    toPath: PathLike,
+} | {
+    kind: 'create',
+    path: PathLike,
 }
 
 export type API = Readonly<{

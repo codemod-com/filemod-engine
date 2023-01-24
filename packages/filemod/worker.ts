@@ -1,4 +1,4 @@
-import { unlink } from 'fs/promises';
+import { unlink, writeFile } from 'fs/promises';
 import { createReadStream, createWriteStream } from 'node:fs';
 import { register } from 'ts-node';
 import { API, Command, Transform } from './transform';
@@ -73,6 +73,11 @@ export const executeCommand = async (command: Command): Promise<void> => {
 
             await unlink(command.fromPath);
 
+            return;
+        }
+
+        case 'create': {
+            await writeFile(command.path, '');
             return;
         }
     }
