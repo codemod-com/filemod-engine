@@ -1,4 +1,7 @@
 import type { API, Command, Transform } from "@intuita/filemod/transform";
+import { basename, extname, join } from "node:path";
+
+const regexp = /\/pages\/([\w.\/\[\]-]+)$/;
 
 export default async function transform(
     rootDirectoryPath: string,
@@ -16,24 +19,44 @@ export default async function transform(
 
     const filePaths = await api.getFilePaths(patterns);
 
-    const regexp = /\/pages\/([\w.\/\[\]-]+)$/;
+    const commands: Command[] = [];
 
     for (const filePath of filePaths) {
-        console.log(filePath);
+        
 
         const regExpMatchArray = filePath.match(regexp);
 
-        if (!regExpMatchArray) {
+        if (!regExpMatchArray || !regExpMatchArray[1]) {
             continue;
         }
 
-        if(regExpMatchArray[1]) {
+        const base = basename(filePath);
+        const ext = extname(filePath);
 
-            console.log(regExpMatchArray[1]);
+        const baseWithNoExt = base.slice(0, base.length - ext.length);
+
+        if (baseWithNoExt === '_app' || baseWithNoExt === '_document' || baseWithNoExt === '_error') {
+            commands.push({
+                kind: 'delete',
+                path: filePath,
+            });
+
+            continue;
         }
+
+        commands.push({
+            kind: 'move',
+            fromPath: filePath,
+            toPath: join(
+                rootDirectoryPath,
+                'app',
+                regExpMatchArray[1].slice(0, regExpMatchArray[1].length - ext.length),
+                `page${ext}`,
+            ),
+        })
     }
 
-    return [];
+    return commands;
 }
 
 transform satisfies Transform;
