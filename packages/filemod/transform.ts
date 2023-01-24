@@ -1,6 +1,8 @@
+import { PathLike } from "node:fs";
+
 export type Command = {
     kind: 'delete',
-    path: string,
+    path: PathLike,
 } | {
     kind: 'move',
     fromPath: string,

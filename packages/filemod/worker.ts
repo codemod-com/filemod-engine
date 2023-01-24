@@ -1,5 +1,8 @@
+import { unlink } from 'fs/promises';
+import { createReadStream, createWriteStream } from 'node:fs';
 import { register } from 'ts-node';
 import { API, Command, Transform } from './transform';
+import { pipeline } from 'node:stream';
 
 register({
     transpileOnly: true,
@@ -29,6 +32,32 @@ export const executeTransform = async (
     return transform(rootDirectoryPath, api);
 }
 
-export const executeCommand = (command: Command) => {
-    
+export const executeCommand = async (command: Command): Promise<void> => {
+    switch (command.kind) {
+        case 'delete': {
+            await unlink(command.path);
+            return;
+        }
+
+        case 'move': {
+            await new Promise<void>((resolve, reject) => {
+                pipeline(
+                    createReadStream(command.fromPath),
+                    createWriteStream(command.toPath),
+                    (err) => {
+                      if (err) {
+                        reject(err);
+                        return;
+                      }
+
+                      resolve();
+                    }
+                  );
+            });
+
+            await unlink(command.fromPath);
+
+            return;
+        }
+    }
 }
