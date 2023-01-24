@@ -1,3 +1,5 @@
+import { API, Command } from "filemod/transform";
+
 export default async function transform(
     rootDirectoryPath: string,
     api: API,

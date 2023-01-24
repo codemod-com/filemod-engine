@@ -1,4 +1,4 @@
-type Command = {
+export type Command = {
     kind: 'delete',
     path: string,
 } | {
@@ -7,7 +7,7 @@ type Command = {
     toPath: string,
 }
 
-type API = {
+export type API = {
 
 }
 

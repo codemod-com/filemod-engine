@@ -20,7 +20,10 @@ importers:
   packages/filemod-tests:
     specifiers:
       '@types/mocha': ^10.0.1
+      filemod: workspace:*
       mocha: ^10.2.0
+    dependencies:
+      filemod: link:../filemod
     devDependencies:
       '@types/mocha': 10.0.1
       mocha: 10.2.0
