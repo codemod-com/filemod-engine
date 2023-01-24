@@ -7,6 +7,10 @@
   "author": "",
   "dependencies": {
     "fast-glob": "^3.2.12",
-    "ts-node": "^10.9.1"
+    "ts-node": "^10.9.1",
+    "yargs": "^17.6.2"
+  },
+  "devDependencies": {
+    "@types/yargs": "^17.0.20"
   }
 }
