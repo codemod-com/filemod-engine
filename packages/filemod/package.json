@@ -2,7 +2,9 @@
   "name": "@intuita/filemod",
   "version": "1.0.0",
   "description": "",
-  "scripts": {},
+  "scripts": {
+    "build": "ncc build ./index.ts -m -o ./build"
+  },
   "keywords": [],
   "author": "",
   "dependencies": {
@@ -11,6 +13,7 @@
     "yargs": "^17.6.2"
   },
   "devDependencies": {
-    "@types/yargs": "^17.0.20"
+    "@types/yargs": "^17.0.20",
+    "@vercel/ncc": "^0.36.0"
   }
 }

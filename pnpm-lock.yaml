@@ -15,6 +15,7 @@ importers:
   packages/filemod:
     specifiers:
       '@types/yargs': ^17.0.20
+      '@vercel/ncc': ^0.36.0
       fast-glob: ^3.2.12
       ts-node: ^10.9.1
       yargs: ^17.6.2
@@ -24,6 +25,7 @@ importers:
       yargs: 17.6.2
     devDependencies:
       '@types/yargs': 17.0.20
+      '@vercel/ncc': 0.36.0
 
   packages/filemod-tests:
     specifiers:
@@ -114,6 +116,11 @@ packages:
     resolution: {integrity: sha512-eknWrTHofQuPk2iuqDm1waA7V6xPlbgBoaaXEgYkClhLOnB0TtbW+srJaOToAgawPxPlHQzwypFA2bhZaUGP5A==}
     dependencies:
       '@types/yargs-parser': 21.0.0
+    dev: true
+
+  /@vercel/ncc/0.36.0:
+    resolution: {integrity: sha512-/ZTUJ/ZkRt694k7KJNimgmHjtQcRuVwsST2Z6XfYveQIuBbHR+EqkTc1jfgPkQmMyk/vtpxo3nVxe8CNuau86A==}
+    hasBin: true
     dev: true
 
   /acorn-walk/8.2.0:
