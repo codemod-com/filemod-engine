@@ -3,6 +3,7 @@ import { createReadStream, createWriteStream } from 'node:fs';
 import { register } from 'ts-node';
 import { API, Command, Transform } from './transform';
 import { pipeline } from 'node:stream';
+import fastGlob from 'fast-glob';
 
 register({
     transpileOnly: true,
@@ -22,6 +23,21 @@ export const buildTransform = (filePath: string): Transform | null => {
     }
 
     return result.default;
+}
+
+export const buildApi = (rootDirectoryPath: string): API => {
+    const getFilePaths = (patterns: ReadonlyArray<string>) =>
+        fastGlob(
+            patterns.slice(),
+            {
+                absolute: true,
+                cwd: rootDirectoryPath,
+            },
+        );
+
+    return {
+        getFilePaths,
+    }
 }
 
 export const executeTransform = async (
@@ -45,14 +61,14 @@ export const executeCommand = async (command: Command): Promise<void> => {
                     createReadStream(command.fromPath),
                     createWriteStream(command.toPath),
                     (err) => {
-                      if (err) {
-                        reject(err);
-                        return;
-                      }
+                        if (err) {
+                            reject(err);
+                            return;
+                        }
 
-                      resolve();
+                        resolve();
                     }
-                  );
+                );
             });
 
             await unlink(command.fromPath);

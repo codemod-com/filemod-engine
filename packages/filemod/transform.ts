@@ -9,15 +9,9 @@ export type Command = {
     toPath: string,
 }
 
-export type API = {
-
-}
+export type API = Readonly<{
+    getFilePaths: (patterns: ReadonlyArray<string>) => Promise<ReadonlyArray<string>>,
+}>;
 
 export type Transform = (rootDirectoryPath: string, api: API) => Promise<ReadonlyArray<Command>>;
 
-// export default async function transform(
-//     rootDirectoryPath: string,
-//     api: API,
-// ): Promise<ReadonlyArray<Command>> {
-//     return [];
-// }
