@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "build": "ncc build ./index.ts -m -o ./build"
+    "build": "ncc build ./index.ts -e ts-node -m -o ./build"
   },
   "keywords": [],
   "author": "",
