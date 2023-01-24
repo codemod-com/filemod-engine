@@ -1,4 +1,4 @@
-import { API, Command } from "@intuita/filemod/transform";
+import type { API, Command, Transform } from "@intuita/filemod/transform";
 
 export default async function transform(
     rootDirectoryPath: string,
@@ -6,3 +6,5 @@ export default async function transform(
 ): Promise<ReadonlyArray<Command>> {
     return [];
 }
+
+transform satisfies Transform;
