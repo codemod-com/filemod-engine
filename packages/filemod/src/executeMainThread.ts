@@ -1,7 +1,8 @@
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 import {
-	buildApi,
+	buildTransformApi,
+	buildCommandApi,
 	buildTransform,
 	executeCommand,
 	registerTsNode,
@@ -41,7 +42,7 @@ export const executeMainThread = async () => {
 					return;
 				}
 
-				const api = buildApi(rootDirectoryPath);
+				const api = buildTransformApi(rootDirectoryPath);
 
 				const commands = await transform(rootDirectoryPath, api);
 
@@ -50,8 +51,10 @@ export const executeMainThread = async () => {
 					return;
 				}
 
+				const commandApi = buildCommandApi();
+
 				for (const command of commands) {
-					await executeCommand(command);
+					await executeCommand(command, commandApi);
 				}
 			},
 		)

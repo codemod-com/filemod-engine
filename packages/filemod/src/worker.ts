@@ -1,7 +1,7 @@
 import { mkdir, unlink, writeFile } from 'fs/promises';
 import { createReadStream, createWriteStream } from 'node:fs';
 import { register } from 'ts-node';
-import { API, Command, CommandApi, Transform } from './types';
+import { TransformApi, Command, CommandApi, Transform } from './types';
 import { pipeline } from 'node:stream';
 import fastGlob from 'fast-glob';
 import { dirname } from 'path';
@@ -42,7 +42,7 @@ export const buildTransform = (filePath: string): Transform | null => {
 	return result.default;
 };
 
-export const buildApi = (rootDirectoryPath: string): API => {
+export const buildTransformApi = (rootDirectoryPath: string): TransformApi => {
 	const getFilePaths = (patterns: ReadonlyArray<string>) =>
 		fastGlob(patterns.slice(), {
 			absolute: true,
@@ -52,14 +52,6 @@ export const buildApi = (rootDirectoryPath: string): API => {
 	return {
 		getFilePaths,
 	};
-};
-
-export const executeTransform = async (
-	transform: Transform,
-	rootDirectoryPath: string,
-	api: API,
-): ReturnType<Transform> => {
-	return transform(rootDirectoryPath, api);
 };
 
 export const buildCommandApi = (): CommandApi => {
