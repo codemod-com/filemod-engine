@@ -1,4 +1,4 @@
-import type { API, Command, Transform } from "@intuita/filemod/transform";
+import type { API, Command, Transform } from "@intuita/filemod";
 import { basename, dirname, extname, join } from "node:path";
 
 const regexp = /\/pages\/([\w.\/\[\]-]+)$/;

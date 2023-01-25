@@ -2,6 +2,11 @@
   "name": "@intuita/filemod",
   "version": "1.0.0",
   "description": "",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "ncc build ./index.ts -e ts-node -m -o ./build",
     "emitDeclarations": "tsc"
