@@ -3,6 +3,9 @@
 	"include": ["./"],
 	"exclude": ["./dist", "./build", "./node_modules"],
     "compilerOptions": {
-        "types": ["node"]
+        "types": ["node"],
+        "declaration": true,
+        "emitDeclarationOnly": true,
+        "outDir": "./dist"
     }
 }
