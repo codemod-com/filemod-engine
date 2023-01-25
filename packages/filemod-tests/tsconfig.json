@@ -2,7 +2,7 @@
 	"extends": "../../tsconfig.json",
 	"include": ["./test"],
 	"exclude": ["./dist", "./build", "./node_modules"],
-    "compilerOptions": {
-        "types": ["node", "mocha"]
-    }
+	"compilerOptions": {
+		"types": ["node", "mocha"]
+	}
 }

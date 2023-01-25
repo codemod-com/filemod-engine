@@ -7,98 +7,96 @@ import fastGlob from 'fast-glob';
 import { dirname } from 'path';
 
 export const buildRegisterTsNodeOnce = () => {
-    let registered = false;
+	let registered = false;
 
-    return () => {
-        if (registered) {
-            return;
-        }
+	return () => {
+		if (registered) {
+			return;
+		}
 
-        register({
-            transpileOnly: true,
-            typeCheck: false,
-        });
+		register({
+			transpileOnly: true,
+			typeCheck: false,
+		});
 
-        registered = true;
-    }
-}
+		registered = true;
+	};
+};
 
 export const registerTsNode = buildRegisterTsNodeOnce();
 
 export const buildTransform = (filePath: string): Transform | null => {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const result = require(filePath);
+	// eslint-disable-next-line @typescript-eslint/no-var-requires
+	const result = require(filePath);
 
-    if (!result ||
-        !('default' in result) ||
-        typeof result.default !== 'function' ||
-        !('length' in result.default) ||
-        result.default.length < 2
-    ) {
-        return null;
-    }
+	if (
+		!result ||
+		!('default' in result) ||
+		typeof result.default !== 'function' ||
+		!('length' in result.default) ||
+		result.default.length < 2
+	) {
+		return null;
+	}
 
-    return result.default;
-}
+	return result.default;
+};
 
 export const buildApi = (rootDirectoryPath: string): API => {
-    const getFilePaths = (patterns: ReadonlyArray<string>) =>
-        fastGlob(
-            patterns.slice(),
-            {
-                absolute: true,
-                cwd: rootDirectoryPath,
-            },
-        );
+	const getFilePaths = (patterns: ReadonlyArray<string>) =>
+		fastGlob(patterns.slice(), {
+			absolute: true,
+			cwd: rootDirectoryPath,
+		});
 
-    return {
-        getFilePaths,
-    }
-}
+	return {
+		getFilePaths,
+	};
+};
 
 export const executeTransform = async (
-    transform: Transform,
-    rootDirectoryPath: string,
-    api: API,
+	transform: Transform,
+	rootDirectoryPath: string,
+	api: API,
 ): ReturnType<Transform> => {
-    return transform(rootDirectoryPath, api);
-}
+	return transform(rootDirectoryPath, api);
+};
 
 export const executeCommand = async (command: Command): Promise<void> => {
-    switch (command.kind) {
-        case 'delete': {
-            await unlink(command.path);
-            return;
-        }
+	switch (command.kind) {
+		case 'delete': {
+			await unlink(command.path);
+			return;
+		}
 
-        case 'move': {
-            const dir = dirname(command.toPath);
-           
-            await mkdir(dir, { recursive: true });
+		case 'move': {
+			const dir = dirname(command.toPath);
 
-            await new Promise<void>((resolve, reject) => {            
-                pipeline(
-                    createReadStream(command.fromPath),
-                    createWriteStream(command.toPath, { flags: 'w+' }),
-                    (err) => {
-                        if (err) {
-                            reject(err);
-                            return;
-                        }
+			await mkdir(dir, { recursive: true });
 
-                        resolve();
-                    }
-                );
-            });
+			await new Promise<void>((resolve, reject) => {
+				pipeline(
+					createReadStream(command.fromPath),
+					createWriteStream(command.toPath, { flags: 'w+' }),
+					(err) => {
+						if (err) {
+							reject(err);
+							return;
+						}
 
-            await unlink(command.fromPath);
+						resolve();
+					},
+				);
+			});
 
-            return;
-        }
+			await unlink(command.fromPath);
 
-        case 'create': {
-            await writeFile(command.path, '');
-            return;
-        }
-    }
-}
+			return;
+		}
+
+		case 'create': {
+			await writeFile(command.path, '');
+			return;
+		}
+	}
+};

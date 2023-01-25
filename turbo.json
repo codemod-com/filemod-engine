@@ -3,9 +3,7 @@
 	"pipeline": {
 		"build": {
 			"dependsOn": [],
-			"outputs": [
-				"./packages/filemod/dist"
-			]
+			"outputs": ["./packages/filemod/dist"]
 		},
 		"test": {
 			"dependsOn": ["build"],

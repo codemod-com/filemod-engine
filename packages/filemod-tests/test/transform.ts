@@ -1,62 +1,66 @@
-import type { API, Command, Transform } from "@intuita/filemod";
-import { basename, dirname, extname, join } from "node:path";
+import type { API, Command, Transform } from '@intuita/filemod';
+import { basename, dirname, extname, join } from 'node:path';
 
 const regexp = /\/pages\/([\w./[\]-]+)$/;
 
 export default async function transform(
-    rootDirectoryPath: string,
-    api: API,
+	rootDirectoryPath: string,
+	api: API,
 ): Promise<ReadonlyArray<Command>> {
-    const patterns = [
-        "**/pages/**/*.js",
-        "**/pages/**/*.jsx",
-        "**/pages/**/*.ts",
-        "**/pages/**/*.tsx",
-        "!**/node_modules",
-    ];
+	const patterns = [
+		'**/pages/**/*.js',
+		'**/pages/**/*.jsx',
+		'**/pages/**/*.ts',
+		'**/pages/**/*.tsx',
+		'!**/node_modules',
+	];
 
-    const filePaths = await api.getFilePaths(patterns);
+	const filePaths = await api.getFilePaths(patterns);
 
-    const commands: Command[] = [];
+	const commands: Command[] = [];
 
-    for (const filePath of filePaths) {
-        const regExpMatchArray = filePath.match(regexp);
+	for (const filePath of filePaths) {
+		const regExpMatchArray = filePath.match(regexp);
 
-        if (!regExpMatchArray || !regExpMatchArray[1]) {
-            continue;
-        }
+		if (!regExpMatchArray || !regExpMatchArray[1]) {
+			continue;
+		}
 
-        const match = regExpMatchArray[1];
+		const match = regExpMatchArray[1];
 
-        const dir = dirname(match);
-        const base = basename(match);
-        const ext = extname(match);
+		const dir = dirname(match);
+		const base = basename(match);
+		const ext = extname(match);
 
-        const baseWithNoExt = base.slice(0, base.length - ext.length);
+		const baseWithNoExt = base.slice(0, base.length - ext.length);
 
-        if (baseWithNoExt === '_app' || baseWithNoExt === '_document' || baseWithNoExt === '_error') {
-            commands.push({
-                kind: 'delete',
-                path: filePath,
-            });
+		if (
+			baseWithNoExt === '_app' ||
+			baseWithNoExt === '_document' ||
+			baseWithNoExt === '_error'
+		) {
+			commands.push({
+				kind: 'delete',
+				path: filePath,
+			});
 
-            continue;
-        }
+			continue;
+		}
 
-        commands.push({
-            kind: 'move',
-            fromPath: filePath,
-            toPath: join(
-                rootDirectoryPath,
-                'app',
-                dir,
-                baseWithNoExt,
-                `page${ext}`,
-            ),
-        })
-    }
+		commands.push({
+			kind: 'move',
+			fromPath: filePath,
+			toPath: join(
+				rootDirectoryPath,
+				'app',
+				dir,
+				baseWithNoExt,
+				`page${ext}`,
+			),
+		});
+	}
 
-    return commands;
+	return commands;
 }
 
 transform satisfies Transform;

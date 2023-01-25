@@ -2,10 +2,10 @@
 	"extends": "../../tsconfig.json",
 	"include": ["./src"],
 	"exclude": ["./dist", "./build", "./node_modules"],
-    "compilerOptions": {
-        "types": ["node"],
-        "target": "es2015",
-        "declaration": true,
-        "outDir": "./dist"
-    }
+	"compilerOptions": {
+		"types": ["node"],
+		"target": "es2015",
+		"declaration": true,
+		"outDir": "./dist"
+	}
 }
