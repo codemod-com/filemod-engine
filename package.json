@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {},
   "keywords": [],
-  "author": "",
+  "author": "Caartaa, Inc.",
   "devDependencies": {
     "@types/node": "^18.11.18",
     "turbo": "^1.7.0",

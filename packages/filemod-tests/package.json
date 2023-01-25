@@ -6,7 +6,7 @@
       "test": "mocha"
     },
     "keywords": [],
-    "author": "",
+    "author": "Caartaa, Inc.",
     "dependencies": {
       "@intuita/filemod": "workspace:filemod"
     },
