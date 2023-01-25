@@ -1,7 +1,7 @@
 import { mkdir, unlink, writeFile } from 'fs/promises';
 import { createReadStream, createWriteStream } from 'node:fs';
 import { register } from 'ts-node';
-import { API, Command, Transform } from './transform';
+import { API, Command, Transform } from './types';
 import { pipeline } from 'node:stream';
 import fastGlob from 'fast-glob';
 import { dirname } from 'path';
