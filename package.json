@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "lint:eslint": "eslint src --fix --ext ts",
+    "lint:eslint": "eslint . --fix",
 		"lint:prettier": "prettier --write ."
   },
   "keywords": [],

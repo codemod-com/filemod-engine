@@ -26,6 +26,7 @@ export const buildRegisterTsNodeOnce = () => {
 export const registerTsNode = buildRegisterTsNodeOnce();
 
 export const buildTransform = (filePath: string): Transform | null => {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
     const result = require(filePath);
 
     if (!result ||

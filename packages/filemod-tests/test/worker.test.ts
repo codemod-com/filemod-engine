@@ -8,13 +8,17 @@ describe('worker', function () {
 
         const transform = buildTransform(filePath);
 
+        if (!transform) {
+            throw new Error('no transform function');
+        }
+
         assert.notStrictEqual(transform, null);
 
         const rootDirectoryPath = '/gppd/intuita/terraform-website';
 
         const api = buildApi(rootDirectoryPath);
 
-        const commands = await executeTransform(transform!, rootDirectoryPath, api);
+        const commands = await executeTransform(transform, rootDirectoryPath, api);
 
         console.log(commands);
     });
