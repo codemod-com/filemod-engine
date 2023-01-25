@@ -6,10 +6,24 @@ import { pipeline } from 'node:stream';
 import fastGlob from 'fast-glob';
 import { dirname } from 'path';
 
-register({
-    transpileOnly: true,
-    typeCheck: false,
-});
+export const buildRegisterTsNodeOnce = () => {
+    let registered = false;
+
+    return () => {
+        if (registered) {
+            return;
+        }
+
+        register({
+            transpileOnly: true,
+            typeCheck: false,
+        });
+
+        registered = true;
+    }
+}
+
+export const registerTsNode = buildRegisterTsNodeOnce();
 
 export const buildTransform = (filePath: string): Transform | null => {
     const result = require(filePath);

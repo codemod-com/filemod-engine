@@ -1,4 +1,4 @@
-import { buildApi, buildTransform, executeTransform } from "@intuita/filemod/worker";
+import { buildApi, buildTransform, executeTransform } from "@intuita/filemod/";
 import assert from "node:assert";
 import path from "node:path";
 

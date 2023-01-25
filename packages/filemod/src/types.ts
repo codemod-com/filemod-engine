@@ -1,4 +1,4 @@
-export type Command = {
+export type Command = Readonly<{
     kind: 'delete',
     path: string,
 } | {
@@ -8,11 +8,10 @@ export type Command = {
 } | {
     kind: 'create',
     path: string,
-}
+}>;
 
 export type API = Readonly<{
     getFilePaths: (patterns: ReadonlyArray<string>) => Promise<ReadonlyArray<string>>,
 }>;
 
 export type Transform = (rootDirectoryPath: string, api: API) => Promise<ReadonlyArray<Command>>;
-

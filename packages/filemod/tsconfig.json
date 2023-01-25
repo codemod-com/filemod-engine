@@ -4,7 +4,6 @@
 	"exclude": ["./dist", "./build", "./node_modules"],
     "compilerOptions": {
         "types": ["node"],
-        "module": "commonjs",
         "target": "es2015",
         "declaration": true,
         "outDir": "./dist"

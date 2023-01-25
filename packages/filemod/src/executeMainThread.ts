@@ -1,6 +1,6 @@
 import yargs from 'yargs';
 import { hideBin } from "yargs/helpers";
-import { buildApi, buildTransform, executeCommand, executeTransform } from './worker';
+import { buildApi, buildTransform, executeCommand, executeTransform, registerTsNode } from './worker';
 
 export const executeMainThread = async () => {
     yargs(hideBin(process.argv))
@@ -35,6 +35,8 @@ export const executeMainThread = async () => {
                 )
             },
             async ({ transformFilePath, rootDirectoryPath, dryRun }) => {
+                registerTsNode();
+
                 const transform = buildTransform(transformFilePath);
 
                 if (!transform) {
