@@ -1,7 +1,7 @@
 import { mkdir, unlink, writeFile } from 'fs/promises';
 import { createReadStream, createWriteStream } from 'node:fs';
 import { register } from 'ts-node';
-import { API, Command, Transform } from './types';
+import { API, Command, CommandApi, Transform } from './types';
 import { pipeline } from 'node:stream';
 import fastGlob from 'fast-glob';
 import { dirname } from 'path';
@@ -61,6 +61,17 @@ export const executeTransform = async (
 ): ReturnType<Transform> => {
 	return transform(rootDirectoryPath, api);
 };
+
+export const buildCommandApi = (): CommandApi => {
+	return {
+		unlink: (path) => unlink(path),
+		dirname: (path) => dirname(path),
+		mkdir: async (path) => { await mkdir(path, { recursive: true }) },
+		createReadStream: (path) => createReadStream(path),
+		createWriteStream: (path) => createWriteStream(path, { flags: 'w+' }),
+		writeFile: (path, data) => writeFile(path, data),
+	}
+}
 
 export const executeCommand = async (command: Command): Promise<void> => {
 	switch (command.kind) {
