@@ -73,22 +73,22 @@ export const buildCommandApi = (): CommandApi => {
 	}
 }
 
-export const executeCommand = async (command: Command): Promise<void> => {
+export const executeCommand = async (command: Command, api: CommandApi): Promise<void> => {
 	switch (command.kind) {
 		case 'delete': {
-			await unlink(command.path);
+			await api.unlink(command.path);
 			return;
 		}
 
 		case 'move': {
-			const dir = dirname(command.toPath);
+			const dir = api.dirname(command.toPath);
 
-			await mkdir(dir, { recursive: true });
+			await api.mkdir(dir);
 
 			await new Promise<void>((resolve, reject) => {
 				pipeline(
-					createReadStream(command.fromPath),
-					createWriteStream(command.toPath, { flags: 'w+' }),
+					api.createReadStream(command.fromPath),
+					api.createWriteStream(command.toPath),
 					(err) => {
 						if (err) {
 							reject(err);
@@ -100,13 +100,13 @@ export const executeCommand = async (command: Command): Promise<void> => {
 				);
 			});
 
-			await unlink(command.fromPath);
+			await api.unlink(command.fromPath);
 
 			return;
 		}
 
 		case 'create': {
-			await writeFile(command.path, '');
+			await api.writeFile(command.path, '');
 			return;
 		}
 	}
