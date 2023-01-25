@@ -1,3 +1,5 @@
 #!/usr/bin/env node
 
-require('./packages/filemod/build/index.js');
+const { executeMainThread } = require('./packages/filemod/dist/index.js');
+
+executeMainThread();

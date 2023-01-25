@@ -8,8 +8,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "ncc build ./index.ts -e ts-node -m -o ./build",
-    "emitDeclarations": "tsc"
+    "build": "tsc"
   },
   "keywords": [],
   "author": "",
