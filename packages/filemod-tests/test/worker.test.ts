@@ -1,9 +1,9 @@
-import { buildTransformApi, buildTransform } from '@intuita/filemod/';
+import { buildTransform, TransformApi } from '@intuita/filemod/';
 import assert from 'node:assert';
 import path from 'node:path';
 
 describe('worker', function () {
-	it('a', async function () {
+	it('should produce correct commands', async function () {
 		const filePath = path.join(__dirname, './transform.ts');
 
 		const transform = buildTransform(filePath);
@@ -14,12 +14,30 @@ describe('worker', function () {
 
 		assert.notStrictEqual(transform, null);
 
-		const rootDirectoryPath = '/gppd/intuita/terraform-website';
+		const rootDirectoryPath = '/opt/project/';
 
-		const api = buildTransformApi(rootDirectoryPath);
+		const api: TransformApi = {
+			async getFilePaths() {
+				return [
+					'/opt/project/pages/index.tsx',
+					'/opt/project/pages/_app.tsx',
+					'/opt/project/pages/_document.tsx',
+					'/opt/project/pages/_error.tsx',
+				];
+			},
+		};
 
 		const commands = await transform(rootDirectoryPath, api);
 
-		console.log(commands);
+		assert.deepEqual(commands, [
+			{
+				kind: 'move',
+				fromPath: '/opt/project/pages/index.tsx',
+				toPath: '/opt/project/app/index/page.tsx',
+			},
+			{ kind: 'delete', path: '/opt/project/pages/_app.tsx' },
+			{ kind: 'delete', path: '/opt/project/pages/_document.tsx' },
+			{ kind: 'delete', path: '/opt/project/pages/_error.tsx' },
+		]);
 	});
 });
