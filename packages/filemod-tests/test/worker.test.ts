@@ -23,6 +23,7 @@ describe('worker', function () {
 					'/opt/project/pages/_app.tsx',
 					'/opt/project/pages/_document.tsx',
 					'/opt/project/pages/_error.tsx',
+					'/opt/project/pages/[slug]/about.tsx',
 				];
 			},
 		};
@@ -38,6 +39,11 @@ describe('worker', function () {
 			{ kind: 'delete', path: '/opt/project/pages/_app.tsx' },
 			{ kind: 'delete', path: '/opt/project/pages/_document.tsx' },
 			{ kind: 'delete', path: '/opt/project/pages/_error.tsx' },
+			{
+				fromPath: '/opt/project/pages/[slug]/about.tsx',
+				kind: 'move',
+				toPath: '/opt/project/app/[slug]/about/page.tsx',
+			},
 		]);
 	});
 });
