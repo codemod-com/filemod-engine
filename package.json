@@ -3,8 +3,10 @@
 	"version": "1.0.0",
 	"description": "",
 	"scripts": {
-		"lint:eslint": "eslint . --fix",
-		"lint:prettier": "prettier --write ."
+		"lint:eslint:check": "eslint .",
+		"lint:prettier:check": "prettier . --check --no-color ",
+		"lint:eslint:write": "eslint . --fix",
+		"lint:prettier:write": "prettier --write ."
 	},
 	"keywords": [],
 	"author": "Caartaa, Inc.",

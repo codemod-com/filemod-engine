@@ -58,14 +58,19 @@ export const buildCommandApi = (): CommandApi => {
 	return {
 		unlink: (path) => unlink(path),
 		dirname: (path) => dirname(path),
-		mkdir: async (path) => { await mkdir(path, { recursive: true }) },
+		mkdir: async (path) => {
+			await mkdir(path, { recursive: true });
+		},
 		createReadStream: (path) => createReadStream(path),
 		createWriteStream: (path) => createWriteStream(path, { flags: 'w+' }),
 		writeFile: (path, data) => writeFile(path, data),
-	}
-}
+	};
+};
 
-export const executeCommand = async (command: Command, api: CommandApi): Promise<void> => {
+export const executeCommand = async (
+	command: Command,
+	api: CommandApi,
+): Promise<void> => {
 	switch (command.kind) {
 		case 'delete': {
 			await api.unlink(command.path);

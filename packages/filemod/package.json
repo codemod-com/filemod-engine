@@ -2,11 +2,14 @@
 	"name": "@intuita/filemod",
 	"version": "1.0.0",
 	"description": "",
-	"main": "dist/index.js",
-	"types": "dist/index.d.ts",
+	"main": "./dist/index.js",
+	"types": "./dist/index.d.ts",
 	"files": [
-		"dist"
+		"./dist"
 	],
+	"bin": {
+		"filemod": "./dist/index.js"
+	},
 	"scripts": {
 		"build": "tsc"
 	},

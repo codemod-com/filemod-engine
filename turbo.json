@@ -1,12 +1,25 @@
 {
 	"$schema": "https://turbo.build/schema.json",
 	"pipeline": {
+		"//#lint:prettier:check": {},
+		"lint": {
+			"dependsOn": [
+				"//#lint:prettier:check"
+			]
+		},
 		"build": {
-			"dependsOn": [],
-			"outputs": ["./packages/filemod/dist"]
+			"dependsOn": [
+				"lint",
+				"^build"
+			],
+			"outputs": [
+				"./packages/filemod/dist"
+			]
 		},
 		"test": {
-			"dependsOn": ["build"],
+			"dependsOn": [
+				"build"
+			],
 			"outputs": []
 		}
 	}
