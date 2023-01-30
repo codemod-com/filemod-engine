@@ -1,0 +1,27 @@
+{
+	"name": "@intuita/filemod",
+	"version": "1.0.0",
+	"description": "",
+	"main": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"files": [
+		"./dist"
+	],
+	"bin": {
+		"filemod": "./dist/index.js"
+	},
+	"scripts": {
+		"build": "tsc"
+	},
+	"keywords": [],
+	"author": "Caartaa, Inc.",
+	"dependencies": {
+		"fast-glob": "^3.2.12",
+		"ts-node": "^10.9.1",
+		"yargs": "^17.6.2"
+	},
+	"devDependencies": {
+		"@types/yargs": "^17.0.20",
+		"@vercel/ncc": "^0.36.0"
+	}
+}
