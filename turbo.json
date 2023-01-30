@@ -1,9 +1,10 @@
 {
 	"$schema": "https://turbo.build/schema.json",
 	"pipeline": {
+		"//#lint:eslint:check": {},
 		"//#lint:prettier:check": {},
 		"lint": {
-			"dependsOn": ["//#lint:prettier:check"]
+			"dependsOn": ["//#lint:eslint:check", "//#lint:prettier:check"]
 		},
 		"build": {
 			"dependsOn": ["lint", "^build"],

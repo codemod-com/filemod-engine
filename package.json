@@ -3,7 +3,7 @@
 	"version": "1.0.0",
 	"description": "",
 	"scripts": {
-		"lint:eslint:check": "eslint .",
+		"lint:eslint:check": "eslint . --no-color",
 		"lint:prettier:check": "prettier . --check --no-color ",
 		"lint:eslint:write": "eslint . --fix",
 		"lint:prettier:write": "prettier --write ."
