@@ -20,4 +20,4 @@ A filemod is like a codemod, but changes the placement of files based on file pa
 
 ## Usage
 
-Check the README [here](./packages/filemod/README.md)
+Check the README [here](./packages/filemod/README.md).
