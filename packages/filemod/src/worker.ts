@@ -108,3 +108,32 @@ export const executeCommand = async (
 		}
 	}
 };
+
+export const handleCliArguments = async (
+	transformFilePath: string,
+	rootDirectoryPath: string,
+	dryRun: boolean,
+): Promise<void> => {
+	registerTsNode();
+
+	const transform = buildTransform(transformFilePath);
+
+	if (!transform) {
+		return;
+	}
+
+	const api = buildTransformApi(rootDirectoryPath);
+
+	const commands = await transform(rootDirectoryPath, api);
+
+	if (dryRun) {
+		console.log(commands);
+		return;
+	}
+
+	const commandApi = buildCommandApi();
+
+	for (const command of commands) {
+		await executeCommand(command, commandApi);
+	}
+}

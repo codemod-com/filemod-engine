@@ -1,12 +1,6 @@
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
-import {
-	buildTransformApi,
-	buildCommandApi,
-	buildTransform,
-	executeCommand,
-	registerTsNode,
-} from './worker';
+import { handleCliArguments } from './worker';
 
 export const executeMainThread = async () => {
 	yargs(hideBin(process.argv))
@@ -33,30 +27,12 @@ export const executeMainThread = async () => {
 						default: false,
 					});
 			},
-			async ({ transformFilePath, rootDirectoryPath, dryRun }) => {
-				registerTsNode();
-
-				const transform = buildTransform(transformFilePath);
-
-				if (!transform) {
-					return;
-				}
-
-				const api = buildTransformApi(rootDirectoryPath);
-
-				const commands = await transform(rootDirectoryPath, api);
-
-				if (dryRun) {
-					console.log(commands);
-					return;
-				}
-
-				const commandApi = buildCommandApi();
-
-				for (const command of commands) {
-					await executeCommand(command, commandApi);
-				}
-			},
+			async ({ transformFilePath, rootDirectoryPath, dryRun }) =>
+				handleCliArguments(
+					transformFilePath,
+					rootDirectoryPath,
+					dryRun,
+				),
 		)
 		.help()
 		.alias('help', 'h')
