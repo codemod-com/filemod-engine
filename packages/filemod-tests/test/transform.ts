@@ -29,6 +29,11 @@ export default async function transform(
 		const match = regExpMatchArray[1];
 
 		const dir = dirname(match);
+
+		if (dir.startsWith('api')) {
+			continue;
+		}
+
 		const base = basename(match);
 		const ext = extname(match);
 
