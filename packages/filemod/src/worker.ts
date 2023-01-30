@@ -136,4 +136,4 @@ export const handleCliArguments = async (
 	for (const command of commands) {
 		await executeCommand(command, commandApi);
 	}
-}
+};
