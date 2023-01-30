@@ -1,4 +1,4 @@
-import { buildApi, buildTransform, executeTransform } from '@intuita/filemod/';
+import { buildTransformApi, buildTransform } from '@intuita/filemod/';
 import assert from 'node:assert';
 import path from 'node:path';
 
@@ -16,13 +16,9 @@ describe('worker', function () {
 
 		const rootDirectoryPath = '/gppd/intuita/terraform-website';
 
-		const api = buildApi(rootDirectoryPath);
+		const api = buildTransformApi(rootDirectoryPath);
 
-		const commands = await executeTransform(
-			transform,
-			rootDirectoryPath,
-			api,
-		);
+		const commands = await transform(rootDirectoryPath, api);
 
 		console.log(commands);
 	});

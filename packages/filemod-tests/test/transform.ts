@@ -1,11 +1,11 @@
-import type { API, Command, Transform } from '@intuita/filemod';
+import type { TransformApi, Command, Transform } from '@intuita/filemod';
 import { basename, dirname, extname, join } from 'node:path';
 
 const regexp = /\/pages\/([\w./[\]-]+)$/;
 
 export default async function transform(
 	rootDirectoryPath: string,
-	api: API,
+	api: TransformApi,
 ): Promise<ReadonlyArray<Command>> {
 	const patterns = [
 		'**/pages/**/*.js',
