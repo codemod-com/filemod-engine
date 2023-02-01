@@ -1,26 +1,24 @@
 version: 1
 posix: true
-includePatterns:
-  - '**/pages/**/*.{js,jsx,ts,tsx}',
+includePattern: '**/pages/**/*.{js,jsx,ts,tsx}'
 excludePatterns:
-  -	'**/node_modules/**'
-  -	'**/pages/api/**'
+    - '**/node_modules/**'
+    - '**/pages/api/**'
 deleteRules:
-  fileRoot:
-    - "_app"
-    - "_document"
-    - "_error"
+    fileRoot:
+        - '_app'
+        - '_document'
+        - '_error'
 replaceRules:
-  - replaceDir:
-    - "pages"
-    - "app"
-  - appendDir:
-      "@fileRoot"
-      fileRootNot: "index"
-  - replaceFileRoot:
-    - "page"
+    - replaceDir:
+          - 'pages'
+          - 'app'
+    - appendDir:
+          - '@fileRoot'
+          - fileRootNot: 'index'
+    - replaceFileRoot:
+          - 'page'
 tests:
-  -
-    - "move"
-    - "/opt/project/pages/index.tsx"
-    - "/opt/project/app/page.tsx"
+    - - 'move'
+      - '/opt/project/pages/index.tsx'
+      - '/opt/project/app/page.tsx'
