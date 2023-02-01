@@ -47,6 +47,8 @@ export const buildTransformApi = (rootDirectoryPath: string): TransformApi => {
 		fastGlob(patterns.slice(), {
 			absolute: true,
 			cwd: rootDirectoryPath,
+			// ignore: ['**/node_modules/**'],
+			extglob: true,
 		});
 
 	return {

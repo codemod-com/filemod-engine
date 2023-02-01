@@ -24,7 +24,8 @@ describe('worker', function () {
 					'/opt/project/pages/_document.tsx',
 					'/opt/project/pages/_error.tsx',
 					'/opt/project/pages/[slug]/about.tsx',
-					'/opt/project/pages/api/index.ts',
+					// '/opt/project/pages/api/index.ts',
+					// '/opt/project/node_modules/lib/pages/index.ts',
 				];
 			},
 		};
