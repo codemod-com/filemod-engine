@@ -7,13 +7,7 @@ export default async function transform(
 	rootDirectoryPath: string,
 	api: TransformApi,
 ): Promise<ReadonlyArray<Command>> {
-	const patterns = [
-		'**/pages/**/*.js',
-		'**/pages/**/*.jsx',
-		'**/pages/**/*.ts',
-		'**/pages/**/*.tsx',
-		'!**/node_modules',
-	];
+	const patterns = ['**/pages/**/*.{js,jsx,ts,tsx}'];
 
 	const filePaths = await api.getFilePaths(patterns);
 
