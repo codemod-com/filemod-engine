@@ -5,10 +5,8 @@ includePatterns:
 excludePatterns:
   -	'**/node_modules/**'
   -	'**/pages/api/**'
-regexp:
-  - "/\/pages\/([\w./[\]-]+)$/"
 deleteRules:
-  baseWithNoExt:
+  fileRoot:
     - "_app"
     - "_document"
     - "_error"
@@ -16,10 +14,13 @@ replaceRules:
   - replaceDir:
     - "pages"
     - "app"
-  - appendDirIf:
-      "@BASE_WITH_NO_EXT"
-      baseWithNoExtNotEqual: "index"
-  - replaceBaseWithNoExt:
+  - appendDir:
+      "@fileRoot"
+      fileRootNot: "index"
+  - replaceFileRoot:
     - "page"
 tests:
-  - todo
+  -
+    - "move"
+    - "/opt/project/pages/index.tsx"
+    - "/opt/project/app/page.tsx"
