@@ -16,8 +16,10 @@ replaceRules:
   - replaceDir:
     - "pages"
     - "app"
-  - appendDir: "@BASE_WITH_NO_EXT"
+  - appendDirIf:
+      "@BASE_WITH_NO_EXT"
+      baseWithNoExtNotEqual: "index"
   - replaceBaseWithNoExt:
     - "page"
 tests:
-  - a
+  - todo

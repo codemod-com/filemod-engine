@@ -19,14 +19,14 @@ export default async function transform(
 	for (const filePath of filePaths) {
 		const { root, base, dir, ext } = path.parse(filePath);
 
-		const baseWithNoExt = base.slice(0, base.length - ext.length);
+		const fileRoot = base.slice(0, base.length - ext.length);
 
 		const dirs = dir.split(path.sep);
 
 		if (
-			baseWithNoExt === '_app' ||
-			baseWithNoExt === '_document' ||
-			baseWithNoExt === '_error'
+			fileRoot === '_app' ||
+			fileRoot === '_document' ||
+			fileRoot === '_error'
 		) {
 			commands.push({
 				kind: 'delete',
@@ -38,10 +38,8 @@ export default async function transform(
 
 		const newDirs = dirs.map((dir) => (dir === 'pages' ? 'app' : dir));
 
-		newDirs.push(baseWithNoExt);
-
-		if (baseWithNoExt === 'index') {
-			newDirs.splice(newDirs.length - 1, 1);
+		if (fileRoot !== 'index') {
+			newDirs.push(fileRoot);
 		}
 
 		commands.push({
