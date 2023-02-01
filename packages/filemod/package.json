@@ -16,7 +16,8 @@
 	"keywords": [],
 	"author": "Caartaa, Inc.",
 	"dependencies": {
-		"fast-glob": "^3.2.12",
+		"glob": "8.1.0",
+		"@types/glob": "8.0.1",
 		"ts-node": "^10.9.1",
 		"yargs": "^17.6.2"
 	},

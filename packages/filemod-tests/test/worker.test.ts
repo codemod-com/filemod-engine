@@ -8,6 +8,16 @@ import { promisify } from 'node:util';
 const promisifiedGlob = promisify(glob);
 
 describe('worker', function () {
+	it('s', () => {
+		const parsedPath = path.parse('/opt/project/pages/[slug]/about.tsx');
+
+		console.log(parsedPath);
+
+		const dirs = parsedPath.dir.split(path.sep);
+
+		console.log(dirs);
+	});
+
 	it('should report correct paths', async function () {
 		const rootDirectoryPath = '/opt/project/';
 
@@ -27,6 +37,7 @@ describe('worker', function () {
 				absolute: true,
 				cwd: rootDirectoryPath,
 				ignore: ['**/node_modules/**', '**/pages/api/**'],
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
 				fs: fs as any,
 			},
 		);
@@ -71,7 +82,7 @@ describe('worker', function () {
 			{
 				kind: 'move',
 				fromPath: '/opt/project/pages/index.tsx',
-				toPath: '/opt/project/app/index/page.tsx',
+				toPath: '/opt/project/app/page.tsx',
 			},
 			{ kind: 'delete', path: '/opt/project/pages/_app.tsx' },
 			{ kind: 'delete', path: '/opt/project/pages/_document.tsx' },

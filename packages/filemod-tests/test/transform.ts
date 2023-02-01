@@ -1,39 +1,27 @@
 import type { TransformApi, Command, Transform } from '@intuita/filemod';
-import { basename, dirname, extname, join } from 'node:path';
-
-const regexp = /\/pages\/([\w./[\]-]+)$/;
+import path from 'node:path';
 
 export default async function transform(
 	rootDirectoryPath: string,
 	api: TransformApi,
 ): Promise<ReadonlyArray<Command>> {
-	const patterns = ['**/pages/**/*.{js,jsx,ts,tsx}', '!**/node_modules'];
+	rootDirectoryPath;
 
-	const filePaths = await api.getFilePaths(patterns);
+	const filePaths = await api.getFilePaths('**/pages/**/*.{js,jsx,ts,tsx}', [
+		'**/node_modules/**',
+		'**/pages/api/**',
+	]);
 
 	console.log(filePaths);
 
 	const commands: Command[] = [];
 
 	for (const filePath of filePaths) {
-		const regExpMatchArray = filePath.match(regexp);
-
-		if (!regExpMatchArray || !regExpMatchArray[1]) {
-			continue;
-		}
-
-		const match = regExpMatchArray[1];
-
-		const dir = dirname(match);
-
-		if (dir.startsWith('api')) {
-			continue;
-		}
-
-		const base = basename(match);
-		const ext = extname(match);
+		const { root, base, dir, ext } = path.parse(filePath);
 
 		const baseWithNoExt = base.slice(0, base.length - ext.length);
+
+		const dirs = dir.split(path.sep);
 
 		if (
 			baseWithNoExt === '_app' ||
@@ -48,16 +36,18 @@ export default async function transform(
 			continue;
 		}
 
+		const newDirs = dirs.map((dir) => (dir === 'pages' ? 'app' : dir));
+
+		newDirs.push(baseWithNoExt);
+
+		if (baseWithNoExt === 'index') {
+			newDirs.splice(newDirs.length - 1, 1);
+		}
+
 		commands.push({
 			kind: 'move',
 			fromPath: filePath,
-			toPath: join(
-				rootDirectoryPath,
-				'app',
-				dir,
-				baseWithNoExt,
-				`page${ext}`,
-			),
+			toPath: path.join(root, ...newDirs, `page${ext}`),
 		});
 	}
 
