@@ -12,6 +12,9 @@
 	},
 	"devDependencies": {
 		"@types/mocha": "^10.0.1",
-		"mocha": "^10.2.0"
+		"mocha": "^10.2.0",
+		"memfs": "3.4.13",
+		"glob": "8.1.0",
+		"@types/glob": "8.0.1"
 	}
 }

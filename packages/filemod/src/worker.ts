@@ -3,7 +3,7 @@ import { createReadStream, createWriteStream } from 'node:fs';
 import { register } from 'ts-node';
 import { TransformApi, Command, CommandApi, Transform } from './types';
 import { pipeline } from 'node:stream';
-import fastGlob from 'fast-glob';
+import fastGlob, { FileSystemAdapter } from 'fast-glob';
 import { dirname } from 'path';
 
 export const buildRegisterTsNodeOnce = () => {
@@ -42,13 +42,15 @@ export const buildTransform = (filePath: string): Transform | null => {
 	return result.default;
 };
 
-export const buildTransformApi = (rootDirectoryPath: string): TransformApi => {
+export const buildTransformApi = (
+	rootDirectoryPath: string,
+	fs?: Partial<FileSystemAdapter> | undefined,
+): TransformApi => {
 	const getFilePaths = (patterns: ReadonlyArray<string>) =>
 		fastGlob(patterns.slice(), {
 			absolute: true,
 			cwd: rootDirectoryPath,
-			// ignore: ['**/node_modules/**'],
-			extglob: true,
+			fs,
 		});
 
 	return {
