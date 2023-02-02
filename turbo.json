@@ -4,14 +4,24 @@
 		"//#lint:eslint:check": {},
 		"//#lint:prettier:check": {},
 		"lint": {
-			"dependsOn": ["//#lint:eslint:check", "//#lint:prettier:check"]
+			"dependsOn": [
+				"//#lint:eslint:check",
+				"//#lint:prettier:check"
+			]
 		},
 		"build": {
-			"dependsOn": ["lint", "^build"],
-			"outputs": ["./packages/filemod/dist"]
+			"dependsOn": [
+				"lint",
+				"^build"
+			],
+			"outputs": [
+				"./packages/filemod/dist"
+			]
 		},
 		"test": {
-			"dependsOn": [],
+			"dependsOn": [
+				"build"
+			],
 			"outputs": []
 		}
 	}
