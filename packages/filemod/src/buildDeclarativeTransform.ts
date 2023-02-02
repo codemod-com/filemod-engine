@@ -7,6 +7,32 @@ type DeleteRule = {
 	value: string;
 };
 
+type ReplaceRule =
+	| {
+			kind: 'replaceDirName';
+			fromValue: string;
+			toValue: string;
+	  }
+	| {
+			kind: 'appendDirName';
+			condition: {
+				kind: 'fileRootNotEqual';
+				value: string;
+			};
+			replacement:
+				| {
+						kind: 'value';
+						value: string;
+				  }
+				| {
+						kind: '@fileRoot';
+				  };
+	  }
+	| {
+			kind: 'replaceFileRoot';
+			value: string;
+	  };
+
 export const buildDeclarativeTransform = (
 	declarativeFilemod: DeclarativeFilemod,
 ): Transform => {
@@ -36,6 +62,50 @@ export const buildDeclarativeTransform = (
 			);
 		}
 	}
+
+	const replaceRules: ReplaceRule[] = [];
+
+	declarativeFilemod.replaceRules?.forEach((replaceRule) => {
+		if ('replaceDir' in replaceRule) {
+			replaceRule.replaceDir;
+
+			replaceRules.push({
+				kind: 'replaceDirName',
+				fromValue: replaceRule.replaceDir[0],
+				toValue: replaceRule.replaceDir[1],
+			});
+		}
+
+		if ('appendDir' in replaceRule) {
+			const [dirName, condition] = replaceRule.appendDir;
+
+			if (condition.fileRootNot) {
+				replaceRules.push({
+					kind: 'appendDirName',
+					condition: {
+						kind: 'fileRootNotEqual',
+						value: condition.fileRootNot,
+					},
+					replacement:
+						dirName === '@fileRoot'
+							? {
+									kind: '@fileRoot',
+							  }
+							: {
+									kind: 'value',
+									value: dirName,
+							  },
+				});
+			}
+		}
+
+		if ('replaceFileRoot' in replaceRule) {
+			replaceRules.push({
+				kind: 'replaceFileRoot',
+				value: replaceRule.replaceFileRoot,
+			});
+		}
+	});
 
 	const pathPlatform = path.posix;
 
