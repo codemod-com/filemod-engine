@@ -19,7 +19,7 @@ export const buildDeclarativeTransform = (
 
 	const pathPlatform = path.posix;
 
-	return async (rootDirectoryPath, transformApi) => {
+	return async (_, transformApi) => {
 		const filePaths = await transformApi.getFilePaths(
 			declarativeFilemod.includePattern,
 			declarativeFilemod.excludePatterns,
@@ -30,9 +30,7 @@ export const buildDeclarativeTransform = (
 		filePaths.forEach((filePath) => {
 			const { root, base, dir, ext } = pathPlatform.parse(filePath);
 
-			const fileRoot = base.slice(0, base.length - ext.length);
-
-			const dirs = dir.split(path.sep);
+			let fileRoot = base.slice(0, base.length - ext.length);
 
 			const doDelete =
 				declarativeFilemod.deleteRules?.fileRoot?.some(
@@ -48,7 +46,45 @@ export const buildDeclarativeTransform = (
 				return;
 			}
 
-            
+			let dirs = dir.split(path.sep);
+
+			// TODO this is the first run of this concept
+			// map rules into a command list and then execute over a command list
+
+			declarativeFilemod.replaceRules?.forEach((replaceRule) => {
+				if ('replaceDir' in replaceRule) {
+					replaceRule.replaceDir;
+
+					dirs = dirs.map((dirName) => {
+						if (dirName !== replaceRule.replaceDir[0]) {
+							return dirName;
+						}
+
+						return replaceRule.replaceDir[1];
+					});
+				}
+
+				if ('appendDir' in replaceRule) {
+					const [dirName, condition] = replaceRule.appendDir;
+
+					if (
+						'fileRootNot' in condition &&
+						fileRoot !== condition.fileRootNot
+					) {
+						dirs.push(dirName === '@fileRoot' ? fileRoot : dirName);
+					}
+				}
+
+				if ('replaceFileRoot' in replaceRule) {
+					fileRoot = replaceRule.replaceFileRoot;
+				}
+			});
+
+			commands.push({
+				kind: 'move',
+				fromPath: filePath,
+				toPath: path.join(root, ...dirs, `page${ext}`),
+			});
 		});
 
 		return [];
