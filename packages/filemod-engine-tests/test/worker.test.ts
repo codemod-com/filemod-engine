@@ -8,14 +8,11 @@ import { promisify } from 'node:util';
 const promisifiedGlob = promisify(glob);
 
 describe('worker', function () {
-	it('s', () => {
+	it('should get the proper directory names', () => {
 		const parsedPath = path.parse('/opt/project/pages/[slug]/about.tsx');
-
-		console.log(parsedPath);
-
 		const dirs = parsedPath.dir.split(path.sep);
 
-		console.log(dirs);
+		assert.deepEqual(dirs, ['', 'opt', 'project', 'pages', '[slug]']);
 	});
 
 	it('should report correct paths', async function () {

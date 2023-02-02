@@ -39,7 +39,7 @@ describe('declarativeFilemodWorker', function () {
 		});
 	});
 
-	it.only('x', async function () {
+	it('should execute the declarative codemod correctly', async function () {
 		const declarativeCodemod = await buildDeclarativeFilemod(
 			path.join(__dirname, './transform.yml'),
 		);
