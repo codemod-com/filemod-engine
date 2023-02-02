@@ -38,7 +38,7 @@ const declarativeFilemodSchema = S.struct({
 	),
 });
 
-type DeclarativeFilemod = S.Infer<typeof declarativeFilemodSchema>;
+export type DeclarativeFilemod = S.Infer<typeof declarativeFilemodSchema>;
 
 export const buildDeclarativeFilemod = async (
 	path: string,

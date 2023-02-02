@@ -128,7 +128,7 @@ export const handleCliArguments = async (
 	const ext = extname(transformFilePath);
 
 	if (ext === '.yml' || ext === '.yaml') {
-		
+		throw new Error('Not implemented');
 	}
 
 	registerTsNode();

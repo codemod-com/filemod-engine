@@ -4,9 +4,6 @@ import path from 'node:path';
 import { Volume } from 'memfs';
 import glob from 'glob';
 import { promisify } from 'node:util';
-import { readFileSync } from 'node:fs';
-import jsYaml from 'js-yaml';
-import * as S from '@fp-ts/schema';
 
 const promisifiedGlob = promisify(glob);
 
@@ -98,5 +95,5 @@ describe('worker', function () {
 		]);
 	});
 
-	it.only('transform.yml', async function () {});
+	// it.only('transform.yml', async function () {});
 });
