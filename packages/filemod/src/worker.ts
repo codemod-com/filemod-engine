@@ -5,6 +5,8 @@ import { Command, CommandApi, Transform } from './types';
 import { pipeline } from 'node:stream';
 import { dirname, extname } from 'path';
 import { buildTransformApi } from './buildTransformApi';
+import { buildDeclarativeFilemod } from './declarativeFilemodWorker';
+import { buildDeclarativeTransform } from './buildDeclarativeTransform';
 
 export const buildRegisterTsNodeOnce = () => {
 	let registered = false;
@@ -25,7 +27,7 @@ export const buildRegisterTsNodeOnce = () => {
 
 export const registerTsNode = buildRegisterTsNodeOnce();
 
-export const buildTransform = (filePath: string): Transform | null => {
+export const buildTransform = (filePath: string): Transform => {
 	// eslint-disable-next-line @typescript-eslint/no-var-requires
 	const result = require(filePath);
 
@@ -36,7 +38,9 @@ export const buildTransform = (filePath: string): Transform | null => {
 		!('length' in result.default) ||
 		result.default.length < 2
 	) {
-		return null;
+		throw new Error(
+			'The transform file does not conform to the requirements',
+		);
 	}
 
 	return result.default;
@@ -104,16 +108,18 @@ export const handleCliArguments = async (
 ): Promise<void> => {
 	const ext = extname(transformFilePath);
 
+	let transform: Transform;
+
 	if (ext === '.yml' || ext === '.yaml') {
-		throw new Error('Not implemented');
-	}
+		const declarativeFilemod = await buildDeclarativeFilemod(
+			transformFilePath,
+		);
 
-	registerTsNode();
+		transform = buildDeclarativeTransform(declarativeFilemod);
+	} else {
+		registerTsNode();
 
-	const transform = buildTransform(transformFilePath);
-
-	if (!transform) {
-		return;
+		transform = buildTransform(transformFilePath);
 	}
 
 	const transformApi = buildTransformApi(rootDirectoryPath);
