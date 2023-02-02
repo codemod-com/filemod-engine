@@ -4,7 +4,7 @@ import { register } from 'ts-node';
 import { TransformApi, Command, CommandApi, Transform } from './types';
 import { pipeline } from 'node:stream';
 import glob from 'glob';
-import { dirname } from 'path';
+import { dirname, extname } from 'path';
 import { promisify } from 'node:util';
 
 const promisifiedGlob = promisify(glob);
@@ -125,6 +125,12 @@ export const handleCliArguments = async (
 	rootDirectoryPath: string,
 	dryRun: boolean,
 ): Promise<void> => {
+	const ext = extname(transformFilePath);
+
+	if (ext === '.yml' || ext === '.yaml') {
+		
+	}
+
 	registerTsNode();
 
 	const transform = buildTransform(transformFilePath);
