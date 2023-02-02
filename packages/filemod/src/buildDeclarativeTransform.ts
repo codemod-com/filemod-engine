@@ -87,6 +87,6 @@ export const buildDeclarativeTransform = (
 			});
 		});
 
-		return [];
+		return commands;
 	};
 };

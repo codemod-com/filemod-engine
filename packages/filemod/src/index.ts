@@ -1,6 +1,7 @@
 export * from './types';
 export * from './worker';
 export * from './declarativeFilemodWorker';
+export * from './buildDeclarativeTransform';
 
 import { platform } from 'node:os';
 import { executeMainThread } from './executeMainThread';

@@ -1,4 +1,8 @@
-import { buildDeclarativeFilemod } from '@intuita/filemod/';
+import {
+	buildDeclarativeFilemod,
+	buildDeclarativeTransform,
+	TransformApi,
+} from '@intuita/filemod/';
 import assert from 'node:assert';
 import path from 'node:path';
 
@@ -33,5 +37,46 @@ describe('declarativeFilemodWorker', function () {
 				},
 			],
 		});
+	});
+
+	it.only('x', async function () {
+		const declarativeCodemod = await buildDeclarativeFilemod(
+			path.join(__dirname, './transform.yml'),
+		);
+
+		const declarativeTransform =
+			buildDeclarativeTransform(declarativeCodemod);
+
+		const rootDirectoryPath = '/opt/project/';
+
+		const api: TransformApi = {
+			async getFilePaths() {
+				return [
+					'/opt/project/pages/index.tsx',
+					'/opt/project/pages/_app.tsx',
+					'/opt/project/pages/_document.tsx',
+					'/opt/project/pages/_error.tsx',
+					'/opt/project/pages/[slug]/about.tsx',
+				];
+			},
+		};
+
+		const commands = await declarativeTransform(rootDirectoryPath, api);
+
+		assert.deepEqual(commands, [
+			{
+				kind: 'move',
+				fromPath: '/opt/project/pages/index.tsx',
+				toPath: '/opt/project/app/page.tsx',
+			},
+			{ kind: 'delete', path: '/opt/project/pages/_app.tsx' },
+			{ kind: 'delete', path: '/opt/project/pages/_document.tsx' },
+			{ kind: 'delete', path: '/opt/project/pages/_error.tsx' },
+			{
+				fromPath: '/opt/project/pages/[slug]/about.tsx',
+				kind: 'move',
+				toPath: '/opt/project/app/[slug]/about/page.tsx',
+			},
+		]);
 	});
 });
