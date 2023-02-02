@@ -2,6 +2,11 @@ import path from 'node:path';
 import { DeclarativeFilemod } from './declarativeFilemodWorker';
 import { Command, Transform } from './types';
 
+type DeleteRule = {
+	kind: 'fileRootEqual';
+	value: string;
+};
+
 export const buildDeclarativeTransform = (
 	declarativeFilemod: DeclarativeFilemod,
 ): Transform => {
@@ -15,6 +20,21 @@ export const buildDeclarativeTransform = (
 		throw new Error(
 			'This filemod engine supports only POSIX-compatible operating systems',
 		);
+	}
+
+	const deleteRules: DeleteRule[] = [];
+
+	if (declarativeFilemod.deleteRules) {
+		if ('fileRoot' in declarativeFilemod.deleteRules) {
+			declarativeFilemod.deleteRules.fileRoot?.forEach(
+				(fileRootValue) => {
+					deleteRules.push({
+						kind: 'fileRootEqual',
+						value: fileRootValue,
+					});
+				},
+			);
+		}
 	}
 
 	const pathPlatform = path.posix;
@@ -32,10 +52,13 @@ export const buildDeclarativeTransform = (
 
 			let fileRoot = base.slice(0, base.length - ext.length);
 
-			const doDelete =
-				declarativeFilemod.deleteRules?.fileRoot?.some(
-					(ruleFileRoot) => ruleFileRoot === fileRoot,
-				) ?? false;
+			const doDelete = deleteRules.some((deleteRule) => {
+				if (deleteRule.kind === 'fileRootEqual') {
+					return deleteRule.value === fileRoot;
+				}
+
+				return false;
+			});
 
 			if (doDelete) {
 				commands.push({
