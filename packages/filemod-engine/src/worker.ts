@@ -5,7 +5,7 @@ import { Command, CommandApi, Transform } from './types';
 import { pipeline } from 'node:stream';
 import { dirname, extname } from 'path';
 import { buildTransformApi } from './buildTransformApi';
-import { buildDeclarativeFilemod } from './declarativeFilemodWorker';
+import { buildDeclarativeFilemod } from './buildDeclarativeFilemod';
 import { buildDeclarativeTransform } from './buildDeclarativeTransform';
 
 export const buildRegisterTsNodeOnce = () => {

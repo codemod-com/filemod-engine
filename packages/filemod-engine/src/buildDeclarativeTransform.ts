@@ -1,5 +1,5 @@
 import path from 'node:path';
-import { DeclarativeFilemod } from './declarativeFilemodWorker';
+import { DeclarativeFilemod } from './buildDeclarativeFilemod';
 import { Command, Transform } from './types';
 
 type DeleteRule = {

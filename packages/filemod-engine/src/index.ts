@@ -1,6 +1,6 @@
 export * from './types';
 export * from './worker';
-export * from './declarativeFilemodWorker';
+export * from './buildDeclarativeFilemod';
 export * from './buildDeclarativeTransform';
 
 import { platform } from 'node:os';
