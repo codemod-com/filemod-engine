@@ -1,13 +1,10 @@
 import { mkdir, unlink, writeFile } from 'fs/promises';
 import { createReadStream, createWriteStream } from 'node:fs';
 import { register } from 'ts-node';
-import { TransformApi, Command, CommandApi, Transform } from './types';
+import { Command, CommandApi, Transform } from './types';
 import { pipeline } from 'node:stream';
-import glob from 'glob';
 import { dirname, extname } from 'path';
-import { promisify } from 'node:util';
-
-const promisifiedGlob = promisify(glob);
+import { buildTransformApi } from './buildTransformApi';
 
 export const buildRegisterTsNodeOnce = () => {
 	let registered = false;
@@ -43,26 +40,6 @@ export const buildTransform = (filePath: string): Transform | null => {
 	}
 
 	return result.default;
-};
-
-export const buildTransformApi = (
-	rootDirectoryPath: string,
-	fs?: typeof import('fs'),
-): TransformApi => {
-	const getFilePaths = (
-		includePattern: string,
-		excludePatterns: ReadonlyArray<string>,
-	) =>
-		promisifiedGlob(includePattern, {
-			absolute: true,
-			cwd: rootDirectoryPath,
-			fs,
-			ignore: excludePatterns,
-		});
-
-	return {
-		getFilePaths,
-	};
 };
 
 export const buildCommandApi = (): CommandApi => {
@@ -139,9 +116,9 @@ export const handleCliArguments = async (
 		return;
 	}
 
-	const api = buildTransformApi(rootDirectoryPath);
+	const transformApi = buildTransformApi(rootDirectoryPath);
 
-	const commands = await transform(rootDirectoryPath, api);
+	const commands = await transform(rootDirectoryPath, transformApi);
 
 	if (dryRun) {
 		console.log(commands);
