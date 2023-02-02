@@ -16,8 +16,7 @@ replaceRules:
     - appendDir:
           - '@fileRoot'
           - fileRootNot: 'index'
-    - replaceFileRoot:
-          - 'page'
+    - replaceFileRoot: 'page'
 tests:
     - - 'move'
       - '/opt/project/pages/index.tsx'

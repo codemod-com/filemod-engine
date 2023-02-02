@@ -4,6 +4,9 @@ import path from 'node:path';
 import { Volume } from 'memfs';
 import glob from 'glob';
 import { promisify } from 'node:util';
+import { readFileSync } from 'node:fs';
+import jsYaml from 'js-yaml';
+import * as S from '@fp-ts/schema';
 
 const promisifiedGlob = promisify(glob);
 
@@ -93,5 +96,55 @@ describe('worker', function () {
 				toPath: '/opt/project/app/[slug]/about/page.tsx',
 			},
 		]);
+	});
+
+	it.only('transform.yml', async function () {
+		const str = readFileSync(path.join(__dirname, './transform.yml'), {
+			encoding: 'utf8',
+		});
+
+		const yml = jsYaml.load(str);
+
+		console.log(yml);
+
+		const filemodSchema = S.struct({
+			version: S.number,
+			posix: S.boolean,
+			includePattern: S.string,
+			excludePatterns: S.array(S.string),
+			deleteRules: S.optional(
+				S.struct({
+					fileRoot: S.optional(S.array(S.string)),
+				}),
+			),
+			replaceRules: S.optional(
+				S.array(
+					S.union(
+						S.struct({
+							replaceDir: S.array(S.string),
+						}),
+						S.struct({
+							appendDir: S.tuple(
+								S.string,
+								S.struct({
+									fileRootNot: S.optional(S.string),
+								}),
+							),
+						}),
+						S.struct({
+							replaceFileRoot: S.string,
+						}),
+					),
+				),
+			),
+		});
+
+		type Filemod = S.Infer<typeof filemodSchema>;
+
+		const parseResult = S.decode(filemodSchema)(yml, {
+			isUnexpectedAllowed: true,
+		});
+
+		console.log(parseResult);
 	});
 });
