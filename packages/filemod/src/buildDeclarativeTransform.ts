@@ -141,35 +141,34 @@ export const buildDeclarativeTransform = (
 
 			let dirs = dir.split(path.sep);
 
-			// TODO this is the first run of this concept
-			// map rules into a command list and then execute over a command list
-
-			declarativeFilemod.replaceRules?.forEach((replaceRule) => {
-				if ('replaceDir' in replaceRule) {
-					replaceRule.replaceDir;
-
+			replaceRules.forEach((replaceRule) => {
+				if (replaceRule.kind === 'replaceDirName') {
 					dirs = dirs.map((dirName) => {
-						if (dirName !== replaceRule.replaceDir[0]) {
+						if (dirName !== replaceRule.fromValue) {
 							return dirName;
 						}
 
-						return replaceRule.replaceDir[1];
+						return replaceRule.toValue;
 					});
 				}
 
-				if ('appendDir' in replaceRule) {
-					const [dirName, condition] = replaceRule.appendDir;
-
+				if (replaceRule.kind === 'appendDirName') {
 					if (
-						'fileRootNot' in condition &&
-						fileRoot !== condition.fileRootNot
+						replaceRule.condition.kind === 'fileRootNotEqual' &&
+						replaceRule.condition.value !== fileRoot
 					) {
-						dirs.push(dirName === '@fileRoot' ? fileRoot : dirName);
+						if (replaceRule.replacement.kind === '@fileRoot') {
+							dirs.push(fileRoot);
+						}
+
+						if (replaceRule.replacement.kind === 'value') {
+							dirs.push(replaceRule.replacement.value);
+						}
 					}
 				}
 
-				if ('replaceFileRoot' in replaceRule) {
-					fileRoot = replaceRule.replaceFileRoot;
+				if (replaceRule.kind === 'replaceFileRoot') {
+					fileRoot = replaceRule.value;
 				}
 			});
 
