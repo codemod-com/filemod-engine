@@ -106,7 +106,7 @@ export const buildDeclarativeTransform = (
 			commands.push({
 				kind: 'move',
 				fromPath: filePath,
-				toPath: path.join(root, ...dirs, `page${ext}`),
+				toPath: path.join(root, ...dirs, `${fileRoot}${ext}`),
 			});
 		});
 
