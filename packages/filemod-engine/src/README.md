@@ -5,4 +5,4 @@
 
 ## Usage
 
-    filemod --help
+    filemod-engine --help

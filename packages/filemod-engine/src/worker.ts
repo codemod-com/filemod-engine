@@ -1,10 +1,12 @@
 import { mkdir, unlink, writeFile } from 'fs/promises';
 import { createReadStream, createWriteStream } from 'node:fs';
 import { register } from 'ts-node';
-import { TransformApi, Command, CommandApi, Transform } from './types';
+import { Command, CommandApi, Transform } from './types';
 import { pipeline } from 'node:stream';
-import fastGlob from 'fast-glob';
-import { dirname } from 'path';
+import { dirname, extname } from 'path';
+import { buildTransformApi } from './buildTransformApi';
+import { buildDeclarativeFilemod } from './buildDeclarativeFilemod';
+import { buildDeclarativeTransform } from './buildDeclarativeTransform';
 
 export const buildRegisterTsNodeOnce = () => {
 	let registered = false;
@@ -25,7 +27,7 @@ export const buildRegisterTsNodeOnce = () => {
 
 export const registerTsNode = buildRegisterTsNodeOnce();
 
-export const buildTransform = (filePath: string): Transform | null => {
+export const buildTransform = (filePath: string): Transform => {
 	// eslint-disable-next-line @typescript-eslint/no-var-requires
 	const result = require(filePath);
 
@@ -36,22 +38,12 @@ export const buildTransform = (filePath: string): Transform | null => {
 		!('length' in result.default) ||
 		result.default.length < 2
 	) {
-		return null;
+		throw new Error(
+			'The transform file does not conform to the requirements',
+		);
 	}
 
 	return result.default;
-};
-
-export const buildTransformApi = (rootDirectoryPath: string): TransformApi => {
-	const getFilePaths = (patterns: ReadonlyArray<string>) =>
-		fastGlob(patterns.slice(), {
-			absolute: true,
-			cwd: rootDirectoryPath,
-		});
-
-	return {
-		getFilePaths,
-	};
 };
 
 export const buildCommandApi = (): CommandApi => {
@@ -114,17 +106,25 @@ export const handleCliArguments = async (
 	rootDirectoryPath: string,
 	dryRun: boolean,
 ): Promise<void> => {
-	registerTsNode();
+	const ext = extname(transformFilePath);
 
-	const transform = buildTransform(transformFilePath);
+	let transform: Transform;
 
-	if (!transform) {
-		return;
+	if (ext === '.yml' || ext === '.yaml') {
+		const declarativeFilemod = await buildDeclarativeFilemod(
+			transformFilePath,
+		);
+
+		transform = buildDeclarativeTransform(declarativeFilemod);
+	} else {
+		registerTsNode();
+
+		transform = buildTransform(transformFilePath);
 	}
 
-	const api = buildTransformApi(rootDirectoryPath);
+	const transformApi = buildTransformApi(rootDirectoryPath);
 
-	const commands = await transform(rootDirectoryPath, api);
+	const commands = await transform(rootDirectoryPath, transformApi);
 
 	if (dryRun) {
 		console.log(commands);

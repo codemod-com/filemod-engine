@@ -18,7 +18,8 @@ export type Command = Readonly<
 
 export type TransformApi = Readonly<{
 	getFilePaths: (
-		patterns: ReadonlyArray<string>,
+		includePattern: string,
+		excludePatterns: ReadonlyArray<string>,
 	) => Promise<ReadonlyArray<string>>;
 }>;
 

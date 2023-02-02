@@ -1,8 +1,8 @@
-# filemod
+# filemod-engine
 
-The monorepo for the **filemod** project.
+The monorepo for the **filemod-engine** project.
 
-**filemod** is a toolkit for executing filemods over directories.
+**filemod-engine** is a toolkit for executing filemods over directories.
 
 A filemod is like a codemod, but changes the placement of files based on file path patterns.
 
