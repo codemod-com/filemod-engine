@@ -94,6 +94,4 @@ describe('worker', function () {
 			},
 		]);
 	});
-
-	// it.only('transform.yml', async function () {});
 });

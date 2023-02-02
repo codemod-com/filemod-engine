@@ -1,5 +1,6 @@
 export * from './types';
 export * from './worker';
+export * from './declarativeFilemodWorker';
 
 import { executeMainThread } from './executeMainThread';
 
