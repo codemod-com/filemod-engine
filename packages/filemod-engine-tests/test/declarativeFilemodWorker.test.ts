@@ -2,7 +2,7 @@ import {
 	buildDeclarativeFilemod,
 	buildDeclarativeTransform,
 	TransformApi,
-} from '@intuita/filemod/';
+} from '@intuita/filemod-engine/';
 import assert from 'node:assert';
 import path from 'node:path';
 
