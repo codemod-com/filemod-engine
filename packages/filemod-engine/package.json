@@ -8,7 +8,7 @@
 		"./dist"
 	],
 	"bin": {
-		"filemod": "./dist/index.js"
+		"filemod-engine": "./dist/index.js"
 	},
 	"scripts": {
 		"build": "tsc"
