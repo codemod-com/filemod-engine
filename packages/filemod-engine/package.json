@@ -1,5 +1,5 @@
 {
-	"name": "@intuita/filemod",
+	"name": "@intuita/filemod-engine",
 	"version": "1.0.0",
 	"description": "",
 	"main": "./dist/index.js",
