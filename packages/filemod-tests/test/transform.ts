@@ -12,8 +12,6 @@ export default async function transform(
 		'**/pages/api/**',
 	]);
 
-	console.log(filePaths);
-
 	const commands: Command[] = [];
 
 	for (const filePath of filePaths) {
