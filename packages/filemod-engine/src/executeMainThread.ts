@@ -35,6 +35,7 @@ export const executeMainThread = async () => {
 				),
 		)
 		.help()
+		.scriptName('filemod-engine')
 		.alias('help', 'h')
 		.parse();
 };

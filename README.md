@@ -20,4 +20,9 @@ A filemod is like a codemod, but changes the placement of files based on file pa
 
 ## Usage
 
-Check the README [here](./packages/filemod/README.md).
+    cd ./packages/filemod-engine
+    pnpm link --global
+
+    filemod-engine --help
+
+Check the README [here](./packages/filemod-engine/README.md).
