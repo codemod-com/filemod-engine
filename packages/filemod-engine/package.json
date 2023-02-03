@@ -1,6 +1,6 @@
 {
 	"name": "@intuita-inc/filemod-engine",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "",
 	"main": "./dist/index.js",
 	"types": "./dist/index.d.ts",
@@ -31,5 +31,5 @@
 		"@types/yargs": "^17.0.20",
 		"@vercel/ncc": "^0.36.0"
 	},
-	"license": "MIT"
+	"license": "Apache License, Version 2.0"
 }
