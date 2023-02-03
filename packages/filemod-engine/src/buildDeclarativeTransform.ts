@@ -66,18 +66,18 @@ export const buildDeclarativeTransform = (
 	const replaceRules: ReplaceRule[] = [];
 
 	declarativeFilemod.replaceRules?.forEach((replaceRule) => {
-		if ('replaceDir' in replaceRule) {
-			replaceRule.replaceDir;
+		if ('replaceDirectoryName' in replaceRule) {
+			replaceRule.replaceDirectoryName;
 
 			replaceRules.push({
 				kind: 'replaceDirName',
-				fromValue: replaceRule.replaceDir[0],
-				toValue: replaceRule.replaceDir[1],
+				fromValue: replaceRule.replaceDirectoryName[0],
+				toValue: replaceRule.replaceDirectoryName[1],
 			});
 		}
 
-		if ('appendDir' in replaceRule) {
-			const [dirName, condition] = replaceRule.appendDir;
+		if ('appendDirectoryName' in replaceRule) {
+			const [dirName, condition] = replaceRule.appendDirectoryName;
 
 			if (condition.fileRootNot) {
 				replaceRules.push({

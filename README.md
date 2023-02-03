@@ -44,10 +44,10 @@ deleteRules:
         - '_document'
         - '_error'
 replaceRules:
-    - replaceDir:
+    - replaceDirectoryName:
           - 'pages'
           - 'app'
-    - appendDir:
+    - appendDirectoryName:
           - '@fileRoot'
           - fileRootNot: 'index'
     - replaceFileRoot: 'page'
@@ -66,7 +66,20 @@ You need to define the following properties:
 * `replaceRules` - the ordered list of rules that modify the filePath
 * `tests` - the set of tests for patterns
 
-How do paths work?
+### How to work on paths?
+
+Any path is split into the following elements:
+* `pathRoot`
+* `directoryNames`
+* `fileRoot`
+* `fileExtension`
+
+For instance, a path like `opt/project/pages/index.tsx` has the following properties (defined using pseudocode):
+* `pathRoot = "/"`
+* `directoryNames = ["", "project", "pages"]`
+* `fileRoot = "index"`
+* `fileExtension = "tsx"`
+
 
 
 ### Usage with an imperative codemod
