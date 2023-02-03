@@ -13,7 +13,7 @@ A filemod is like a codemod, but changes the placement of files based on file pa
 ## Linting and Testing
 
     pnpm turbo run lint # check linting rules
-    pnpm turbo run test # run all the tests
+    pnpm test # run all the tests
 
     pnpm run lint:eslint:write
     pnpm run lint:prettier:write
@@ -25,4 +25,48 @@ A filemod is like a codemod, but changes the placement of files based on file pa
 
     filemod-engine --help
 
-Check the README [here](./packages/filemod-engine/README.md).
+### Usage with a declarative filemod
+
+    filemod-engine transform [*.yml] [rootDirectoryPath]
+
+In order to use a declarative filemod, one needs to be written. Such codemods are written in YAML, like this:
+
+```
+version: 1
+posix: true
+includePattern: '**/pages/**/*.{js,jsx,ts,tsx}'
+excludePatterns:
+    - '**/node_modules/**'
+    - '**/pages/api/**'
+deleteRules:
+    fileRoot:
+        - '_app'
+        - '_document'
+        - '_error'
+replaceRules:
+    - replaceDir:
+          - 'pages'
+          - 'app'
+    - appendDir:
+          - '@fileRoot'
+          - fileRootNot: 'index'
+    - replaceFileRoot: 'page'
+tests:
+    - - 'move'
+      - '/opt/project/pages/index.tsx'
+      - '/opt/project/app/page.tsx'
+```
+
+You need to define the following properties:
+* `version`: 1
+* `posix` (for now we support only POSIX platforms)
+* `includePattern` - the glob pattern to run against the root directory path
+* `excludePattern` - the glob pattern to run against the root directory path for exclusion of file paths
+* `deleteRules` - the union of rules that tell whether to remove the files or not
+* `replaceRules` - the ordered list of rules that modify the filePath
+* `tests` - the set of tests for patterns
+
+How do paths work?
+
+
+### Usage with an imperative codemod
