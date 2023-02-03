@@ -31,6 +31,5 @@
 		"@types/yargs": "^17.0.20",
 		"@vercel/ncc": "^0.36.0"
 	},
-	"license": "MIT",
-	"private": "false"
+	"license": "MIT"
 }
