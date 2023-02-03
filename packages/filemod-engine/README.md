@@ -9,7 +9,13 @@
 
 ### Usage with a declarative filemod
 
-    filemod-engine transform [filemod.yml] [rootDirectoryPath]
+    filemod-engine transform [transformFilePath] [rootDirectoryPath]
+
+Where:
+* `transformFilePath` is the absolute path to the YML file (DSL) that contains the transform declaration
+* `rootDirectoryPath` is the absolute path to the root of your project
+
+You can also pass `--dryRun` if you want to see what changes will be written.
 
 In order to use a declarative filemod, one needs to be written. Such codemods are written in YAML, like this:
 
