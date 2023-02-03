@@ -5,7 +5,10 @@
 	"main": "./dist/index.js",
 	"types": "./dist/index.d.ts",
 	"files": [
-		"./dist"
+		"./dist",
+		"LICENSE",
+		"README.md",
+		"tsconfig.json"
 	],
 	"bin": {
 		"filemod-engine": "./dist/index.js"

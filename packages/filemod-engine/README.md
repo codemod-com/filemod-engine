@@ -9,7 +9,7 @@
 
 ### Usage with a declarative filemod
 
-    filemod-engine transform [*.yml] [rootDirectoryPath]
+    filemod-engine transform [filemod.yml] [rootDirectoryPath]
 
 In order to use a declarative filemod, one needs to be written. Such codemods are written in YAML, like this:
 
@@ -75,6 +75,24 @@ The `fileRoot` equals rule delete a file path if any of the provided labels matc
 
 ### Replace Rules
 
-Each replace rule with have a read/write access to all the 4 path properties 
+Each replace rule with have a read/write access to all the 4 path properties mentioned before. Each rule is executed in the declaration order.
+
+The `replaceDirectoryName` rule replaces any directory Name that matches the 0th literal with the 1st literal. Check the example below:
+    
+    replaceDirectoryName:
+            - 'pages'
+            - 'app'
+ 
+The `appendDirectoryName` rule add a new directory name to the end of the list of directory names based on a condition. In the following example, if the file root does not equal `index`, a new directory named the same as file root will be appended.
+
+    appendDirectoryName:
+          - '@fileRoot'
+          - fileRootNot: 'index'
+
+The `replaceFileRoot` rule replaces the the existing file root with a new literal, like `page` in the following example:
+    
+    replaceFileRoot: 'page'
 
 ### Usage with an imperative codemod
+
+TBD
