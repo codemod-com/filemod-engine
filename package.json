@@ -2,11 +2,13 @@
 	"name": "filemod-engine-monorepo",
 	"version": "1.0.0",
 	"description": "",
+	"bin": {},
 	"scripts": {
 		"lint:eslint:check": "eslint . --no-color",
 		"lint:prettier:check": "prettier . --check --no-color ",
 		"lint:eslint:write": "eslint . --fix",
-		"lint:prettier:write": "prettier --write ."
+		"lint:prettier:write": "prettier --write .",
+		"test": "turbo test"
 	},
 	"keywords": [],
 	"author": "Caartaa, Inc.",

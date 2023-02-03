@@ -10,10 +10,10 @@ deleteRules:
         - '_document'
         - '_error'
 replaceRules:
-    - replaceDir:
+    - replaceDirectoryName:
           - 'pages'
           - 'app'
-    - appendDir:
+    - appendDirectoryName:
           - '@fileRoot'
           - fileRootNot: 'index'
     - replaceFileRoot: 'page'

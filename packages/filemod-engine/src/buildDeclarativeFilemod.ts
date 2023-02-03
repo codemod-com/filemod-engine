@@ -20,10 +20,10 @@ const declarativeFilemodSchema = S.struct({
 		S.array(
 			S.union(
 				S.struct({
-					replaceDir: S.tuple(S.string, S.string),
+					replaceDirectoryName: S.tuple(S.string, S.string),
 				}),
 				S.struct({
-					appendDir: S.tuple(
+					appendDirectoryName: S.tuple(
 						S.string,
 						S.struct({
 							fileRootNot: S.optional(S.string),

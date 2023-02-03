@@ -2,6 +2,7 @@
 	"name": "filemod-engine-tests",
 	"version": "1.0.0",
 	"description": "",
+	"bin": {},
 	"scripts": {
 		"test": "mocha"
 	},

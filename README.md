@@ -13,11 +13,12 @@ A filemod is like a codemod, but changes the placement of files based on file pa
 ## Linting and Testing
 
     pnpm turbo run lint # check linting rules
-    pnpm turbo run test # run all the tests
+    pnpm test # run all the tests
 
     pnpm run lint:eslint:write
     pnpm run lint:prettier:write
 
-## Usage
 
-Check the README [here](./packages/filemod/README.md).
+### The filemod-engine package
+
+Go [here](./packages/filemod-engine/README.md)

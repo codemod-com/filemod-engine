@@ -22,10 +22,10 @@ describe('declarativeFilemodWorker', function () {
 			},
 			replaceRules: [
 				{
-					replaceDir: ['pages', 'app'],
+					replaceDirectoryName: ['pages', 'app'],
 				},
 				{
-					appendDir: [
+					appendDirectoryName: [
 						'@fileRoot',
 						{
 							fileRootNot: 'index',
