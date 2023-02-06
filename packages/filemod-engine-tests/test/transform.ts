@@ -1,4 +1,8 @@
-import type { TransformApi, Command, Transform } from '@intuita/filemod-engine';
+import type {
+	TransformApi,
+	Command,
+	Transform,
+} from '@intuita-inc/filemod-engine';
 import path from 'node:path';
 
 export default async function transform(

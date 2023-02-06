@@ -3,15 +3,15 @@ import {
 	buildDeclarativeTransform,
 	buildFilePathTransformApi,
 	TransformApi,
-} from '@intuita/filemod-engine/';
+} from '@intuita-inc/filemod-engine/';
 import assert from 'node:assert';
 import path from 'node:path';
 
 describe('declarativeFilemodWorker', function () {
 	it('should build a DeclarativeFilemod', async function () {
-		const declarativeCodemod = await buildDeclarativeFilemod(
-			path.join(__dirname, './transform.yml'),
-		);
+		const declarativeCodemod = await buildDeclarativeFilemod({
+			filePath: path.join(__dirname, './transform.yml'),
+		});
 
 		assert.deepEqual(declarativeCodemod, {
 			version: 1,
@@ -41,9 +41,9 @@ describe('declarativeFilemodWorker', function () {
 	});
 
 	it('should execute the declarative codemod correctly', async function () {
-		const declarativeCodemod = await buildDeclarativeFilemod(
-			path.join(__dirname, './transform.yml'),
-		);
+		const declarativeCodemod = await buildDeclarativeFilemod({
+			filePath: path.join(__dirname, './transform.yml'),
+		});
 
 		const declarativeTransform =
 			buildDeclarativeTransform(declarativeCodemod);
@@ -82,9 +82,9 @@ describe('declarativeFilemodWorker', function () {
 	});
 
 	it('buildFilePathTransformApi', async function () {
-		const declarativeCodemod = await buildDeclarativeFilemod(
-			path.join(__dirname, './transform.yml'),
-		);
+		const declarativeCodemod = await buildDeclarativeFilemod({
+			filePath: path.join(__dirname, './transform.yml'),
+		});
 
 		const declarativeTransform =
 			buildDeclarativeTransform(declarativeCodemod);
