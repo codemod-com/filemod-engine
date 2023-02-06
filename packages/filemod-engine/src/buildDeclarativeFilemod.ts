@@ -56,8 +56,10 @@ export const buildDeclarativeFilemod = async (
 	if ('filePath' in arg) {
 		str = await promisifiedReadFile(arg.filePath, { encoding: 'utf8' });
 	} else {
-		str = arg.buffer.toString('base64url');
+		str = arg.buffer.toString('utf8');
 	}
+
+	console.log('AAAA', str);
 
 	const yml = jsYaml.load(str, {
 		filename: 'filePath' in arg ? arg.filePath : undefined,
