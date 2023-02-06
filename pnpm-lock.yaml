@@ -32,6 +32,7 @@ importers:
             '@vercel/ncc': ^0.36.0
             glob: 8.1.0
             js-yaml: ^4.1.0
+            memfs: 3.4.13
             ts-node: ^10.9.1
             yargs: ^17.6.2
         dependencies:
@@ -39,6 +40,7 @@ importers:
             '@types/glob': 8.0.1
             glob: 8.1.0
             js-yaml: 4.1.0
+            memfs: 3.4.13
             ts-node: 10.9.1
             yargs: 17.6.2
         devDependencies:
@@ -1128,7 +1130,6 @@ packages:
             {
                 integrity: sha512-cybjIfiiE+pTWicSCLFHSrXZ6EilF30oh91FDP9S2B051prEa7QWfrVTQm10/dDpswBDXZugPa1Ogu8Yh+HV0Q==,
             }
-        dev: true
 
     /fs.realpath/1.0.0:
         resolution:
@@ -1459,7 +1460,6 @@ packages:
         engines: { node: '>= 4.0.0' }
         dependencies:
             fs-monkey: 1.0.3
-        dev: true
 
     /merge2/1.4.1:
         resolution:
