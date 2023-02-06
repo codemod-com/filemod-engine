@@ -1,6 +1,6 @@
 {
 	"name": "@intuita-inc/filemod-engine",
-	"version": "1.0.1",
+	"version": "1.1.1-rc.1",
 	"description": "",
 	"main": "./dist/index.js",
 	"types": "./dist/index.d.ts",
@@ -23,6 +23,7 @@
 		"@types/glob": "8.0.1",
 		"glob": "8.1.0",
 		"js-yaml": "^4.1.0",
+		"memfs": "3.4.13",
 		"ts-node": "^10.9.1",
 		"yargs": "^17.6.2"
 	},

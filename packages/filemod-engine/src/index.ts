@@ -1,5 +1,6 @@
 export * from './types';
 export * from './worker';
+export * from './buildTransformApi';
 export * from './buildDeclarativeFilemod';
 export * from './buildDeclarativeTransform';
 

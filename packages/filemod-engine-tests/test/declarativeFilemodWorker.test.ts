@@ -1,6 +1,7 @@
 import {
 	buildDeclarativeFilemod,
 	buildDeclarativeTransform,
+	buildFilePathTransformApi,
 	TransformApi,
 } from '@intuita/filemod-engine/';
 import assert from 'node:assert';
@@ -72,6 +73,35 @@ describe('declarativeFilemodWorker', function () {
 			{ kind: 'delete', path: '/opt/project/pages/_app.tsx' },
 			{ kind: 'delete', path: '/opt/project/pages/_document.tsx' },
 			{ kind: 'delete', path: '/opt/project/pages/_error.tsx' },
+			{
+				fromPath: '/opt/project/pages/[slug]/about.tsx',
+				kind: 'move',
+				toPath: '/opt/project/app/[slug]/about/page.tsx',
+			},
+		]);
+	});
+
+	it('buildFilePathTransformApi', async function () {
+		const declarativeCodemod = await buildDeclarativeFilemod(
+			path.join(__dirname, './transform.yml'),
+		);
+
+		const declarativeTransform =
+			buildDeclarativeTransform(declarativeCodemod);
+
+		const rootDirectoryPath = '/opt/project/';
+
+		const transformApi = buildFilePathTransformApi(
+			rootDirectoryPath,
+			'/opt/project/pages/[slug]/about.tsx',
+		);
+
+		const commands = await declarativeTransform(
+			rootDirectoryPath,
+			transformApi,
+		);
+
+		assert.deepEqual(commands, [
 			{
 				fromPath: '/opt/project/pages/[slug]/about.tsx',
 				kind: 'move',
