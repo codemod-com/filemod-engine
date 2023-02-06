@@ -111,9 +111,9 @@ export const handleCliArguments = async (
 	let transform: Transform;
 
 	if (ext === '.yml' || ext === '.yaml') {
-		const declarativeFilemod = await buildDeclarativeFilemod(
-			transformFilePath,
-		);
+		const declarativeFilemod = await buildDeclarativeFilemod({
+			filePath: transformFilePath,
+		});
 
 		transform = buildDeclarativeTransform(declarativeFilemod);
 	} else {
