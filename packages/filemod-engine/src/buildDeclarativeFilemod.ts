@@ -59,8 +59,6 @@ export const buildDeclarativeFilemod = async (
 		str = arg.buffer.toString('utf8');
 	}
 
-	console.log('AAAA', str);
-
 	const yml = jsYaml.load(str, {
 		filename: 'filePath' in arg ? arg.filePath : undefined,
 	});
