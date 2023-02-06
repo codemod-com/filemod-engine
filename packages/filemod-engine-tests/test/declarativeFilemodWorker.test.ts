@@ -3,15 +3,15 @@ import {
 	buildDeclarativeTransform,
 	buildFilePathTransformApi,
 	TransformApi,
-} from '@intuita/filemod-engine/';
+} from '@intuita-inc/filemod-engine/';
 import assert from 'node:assert';
 import path from 'node:path';
 
 describe('declarativeFilemodWorker', function () {
 	it('should build a DeclarativeFilemod', async function () {
-		const declarativeCodemod = await buildDeclarativeFilemod(
-			path.join(__dirname, './transform.yml'),
-		);
+		const declarativeCodemod = await buildDeclarativeFilemod({
+			filePath: path.join(__dirname, './transform.yml'),
+		});
 
 		assert.deepEqual(declarativeCodemod, {
 			version: 1,
@@ -41,9 +41,9 @@ describe('declarativeFilemodWorker', function () {
 	});
 
 	it('should execute the declarative codemod correctly', async function () {
-		const declarativeCodemod = await buildDeclarativeFilemod(
-			path.join(__dirname, './transform.yml'),
-		);
+		const declarativeCodemod = await buildDeclarativeFilemod({
+			filePath: path.join(__dirname, './transform.yml'),
+		});
 
 		const declarativeTransform =
 			buildDeclarativeTransform(declarativeCodemod);
@@ -81,10 +81,42 @@ describe('declarativeFilemodWorker', function () {
 		]);
 	});
 
-	it('buildFilePathTransformApi', async function () {
-		const declarativeCodemod = await buildDeclarativeFilemod(
-			path.join(__dirname, './transform.yml'),
+	it('should use a declarative codemod using buildFilePathTransformApi', async function () {
+		const declarativeCodemod = await buildDeclarativeFilemod({
+			filePath: path.join(__dirname, './transform.yml'),
+		});
+
+		const declarativeTransform =
+			buildDeclarativeTransform(declarativeCodemod);
+
+		const rootDirectoryPath = '/opt/project/';
+
+		const transformApi = buildFilePathTransformApi(
+			rootDirectoryPath,
+			'/opt/project/pages/[slug]/about.tsx',
 		);
+
+		const commands = await declarativeTransform(
+			rootDirectoryPath,
+			transformApi,
+		);
+
+		assert.deepEqual(commands, [
+			{
+				fromPath: '/opt/project/pages/[slug]/about.tsx',
+				kind: 'move',
+				toPath: '/opt/project/app/[slug]/about/page.tsx',
+			},
+		]);
+	});
+
+	it('should use a declarative codemod using buildFilePathTransformApi (Buffer)', async function () {
+		const declarativeCodemod = await buildDeclarativeFilemod({
+			buffer: Buffer.from(
+				'dmVyc2lvbjogMQpwb3NpeDogdHJ1ZQppbmNsdWRlUGF0dGVybjogIioqL3BhZ2VzLyoqLyoue2pzLGpzeCx0cyx0c3h9IgpleGNsdWRlUGF0dGVybnM6CiAgLSAiKiovbm9kZV9tb2R1bGVzLyoqIgogIC0gIioqL3BhZ2VzL2FwaS8qKiIKZGVsZXRlUnVsZXM6CiAgZmlsZVJvb3Q6CiAgICAtICJfYXBwIgogICAgLSAiX2RvY3VtZW50IgogICAgLSAiX2Vycm9yIgpyZXBsYWNlUnVsZXM6CiAgLSByZXBsYWNlRGlyZWN0b3J5TmFtZToKICAgICAgLSAicGFnZXMiCiAgICAgIC0gImFwcCIKICAtIGFwcGVuZERpcmVjdG9yeU5hbWU6CiAgICAgIC0gIkBmaWxlUm9vdCIKICAgICAgLSBmaWxlUm9vdE5vdDogImluZGV4IgogIC0gcmVwbGFjZUZpbGVSb290OiAicGFnZSIKdGVzdHM6CiAgLSAtICJtb3ZlIgogICAgLSAiL29wdC9wcm9qZWN0L3BhZ2VzL2luZGV4LnRzeCIKICAgIC0gIi9vcHQvcHJvamVjdC9hcHAvcGFnZS50c3giCg',
+				'base64url',
+			),
+		});
 
 		const declarativeTransform =
 			buildDeclarativeTransform(declarativeCodemod);

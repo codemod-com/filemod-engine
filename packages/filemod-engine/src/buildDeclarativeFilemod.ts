@@ -40,12 +40,30 @@ const declarativeFilemodSchema = S.struct({
 
 export type DeclarativeFilemod = S.Infer<typeof declarativeFilemodSchema>;
 
-export const buildDeclarativeFilemod = async (
-	path: string,
-): Promise<DeclarativeFilemod> => {
-	const str = await promisifiedReadFile(path, { encoding: 'utf8' });
+export type BuildDeclarativeFilemodArgument =
+	| Readonly<{
+			filePath: string;
+	  }>
+	| Readonly<{
+			buffer: Buffer;
+	  }>;
 
-	const yml = jsYaml.load(str, { filename: path });
+export const buildDeclarativeFilemod = async (
+	arg: BuildDeclarativeFilemodArgument,
+): Promise<DeclarativeFilemod> => {
+	let str: string;
+
+	if ('filePath' in arg) {
+		str = await promisifiedReadFile(arg.filePath, { encoding: 'utf8' });
+	} else {
+		str = arg.buffer.toString('utf8');
+	}
+
+	console.log('AAAA', str);
+
+	const yml = jsYaml.load(str, {
+		filename: 'filePath' in arg ? arg.filePath : undefined,
+	});
 
 	return S.decodeOrThrow(declarativeFilemodSchema)(yml, {
 		isUnexpectedAllowed: true,

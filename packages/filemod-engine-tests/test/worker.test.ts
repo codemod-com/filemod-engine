@@ -1,4 +1,4 @@
-import { buildTransform, TransformApi } from '@intuita/filemod-engine';
+import { buildTransform, TransformApi } from '@intuita-inc/filemod-engine';
 import assert from 'node:assert';
 import path from 'node:path';
 import { Volume } from 'memfs';

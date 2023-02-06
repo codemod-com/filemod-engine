@@ -9,7 +9,7 @@
 	"keywords": [],
 	"author": "Caartaa, Inc.",
 	"dependencies": {
-		"@intuita/filemod-engine": "workspace:filemod-engine"
+		"@intuita-inc/filemod-engine": "workspace:filemod-engine"
 	},
 	"devDependencies": {
 		"@types/glob": "8.0.1",

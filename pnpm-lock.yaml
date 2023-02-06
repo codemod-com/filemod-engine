@@ -50,14 +50,14 @@ importers:
 
     packages/filemod-engine-tests:
         specifiers:
-            '@intuita/filemod-engine': workspace:filemod-engine
+            '@intuita-inc/filemod-engine': workspace:filemod-engine
             '@types/glob': 8.0.1
             '@types/mocha': ^10.0.1
             glob: 8.1.0
             memfs: 3.4.13
             mocha: ^10.2.0
         dependencies:
-            '@intuita/filemod-engine': link:../filemod-engine
+            '@intuita-inc/filemod-engine': link:../filemod-engine
         devDependencies:
             '@types/glob': 8.0.1
             '@types/mocha': 10.0.1
