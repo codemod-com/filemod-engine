@@ -52,6 +52,7 @@ You need to define the following properties:
 * `excludePattern` - the glob pattern to run against the root directory path for exclusion of file paths
 * `deleteRules` - the union of rules that tell whether to remove the files or not
 * `replaceRules` - the ordered list of rules that modify the filePath
+* `copyRules` - the ordered list of rules that create the copy path for the filePath
 * `tests` - the set of tests for patterns
 
 ### How to work on paths?
@@ -79,9 +80,9 @@ The `fileRoot` equals rule delete a file path if any of the provided labels matc
         - '_document'
         - '_error'
 
-### Replace Rules
+### Replace/Copy Rules
 
-Each replace rule with have a read/write access to all the 4 path properties mentioned before. Each rule is executed in the declaration order.
+Each replace/copy rule with have a read/write access to all the 4 path properties mentioned before. Each rule is executed in the declaration order.
 
 The `replaceDirectoryName` rule replaces any directory Name that matches the 0th literal with the 1st literal. Check the example below:
     

@@ -9,7 +9,7 @@ deleteRules:
         - '_app'
         - '_document'
         - '_error'
-replaceRules:
+copyRules:
     - replaceDirectoryName:
           - 'pages'
           - 'app'

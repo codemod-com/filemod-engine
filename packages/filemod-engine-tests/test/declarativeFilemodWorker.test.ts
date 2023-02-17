@@ -21,7 +21,7 @@ describe('declarativeFilemodWorker', function () {
 			deleteRules: {
 				fileRoot: ['_app', '_document', '_error'],
 			},
-			replaceRules: [
+			copyRules: [
 				{
 					replaceDirectoryName: ['pages', 'app'],
 				},
@@ -66,7 +66,7 @@ describe('declarativeFilemodWorker', function () {
 
 		assert.deepEqual(commands, [
 			{
-				kind: 'move',
+				kind: 'copy',
 				fromPath: '/opt/project/pages/index.tsx',
 				toPath: '/opt/project/app/page.tsx',
 			},
@@ -75,7 +75,7 @@ describe('declarativeFilemodWorker', function () {
 			{ kind: 'delete', path: '/opt/project/pages/_error.tsx' },
 			{
 				fromPath: '/opt/project/pages/[slug]/about.tsx',
-				kind: 'move',
+				kind: 'copy',
 				toPath: '/opt/project/app/[slug]/about/page.tsx',
 			},
 		]);
@@ -104,7 +104,7 @@ describe('declarativeFilemodWorker', function () {
 		assert.deepEqual(commands, [
 			{
 				fromPath: '/opt/project/pages/[slug]/about.tsx',
-				kind: 'move',
+				kind: 'copy',
 				toPath: '/opt/project/app/[slug]/about/page.tsx',
 			},
 		]);
