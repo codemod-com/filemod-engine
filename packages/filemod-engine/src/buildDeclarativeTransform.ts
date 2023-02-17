@@ -193,6 +193,12 @@ export const buildDeclarativeTransform = (
 				return;
 			}
 
+			if (replaceRules.length > 0 && copyRules.length > 0) {
+				throw new Error(
+					'You cannot declare both replace and copy rules',
+				);
+			}
+
 			if (replaceRules.length > 0) {
 				const replacedPath = transformPath(parsedPath, replaceRules);
 
@@ -206,7 +212,7 @@ export const buildDeclarativeTransform = (
 			}
 
 			if (copyRules.length > 0) {
-				const copyPath = transformPath(parsedPath, replaceRules);
+				const copyPath = transformPath(parsedPath, copyRules);
 
 				if (copyPath !== filePath) {
 					commands.push({
