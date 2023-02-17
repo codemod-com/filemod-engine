@@ -7,7 +7,7 @@ type DeleteRule = {
 	value: string;
 };
 
-type ReplaceOrCopyRule =
+type Rule =
 	| {
 			kind: 'replaceDirName';
 			fromValue: string;
@@ -63,11 +63,13 @@ export const buildDeclarativeTransform = (
 		}
 	}
 
-	const handleDeclarativeRule = (rule: DeclarativeRule) => {
-		if ('replaceDirectoryName' in rule) {
-			rule.replaceDirectoryName;
+	const handleDeclarativeRule = (
+		rule: DeclarativeRule,
+	): ReadonlyArray<Rule> => {
+		const rules: Rule[] = [];
 
-			replaceRules.push({
+		if ('replaceDirectoryName' in rule) {
+			rules.push({
 				kind: 'replaceDirName',
 				fromValue: rule.replaceDirectoryName[0],
 				toValue: rule.replaceDirectoryName[1],
@@ -78,7 +80,7 @@ export const buildDeclarativeTransform = (
 			const [dirName, condition] = rule.appendDirectoryName;
 
 			if (condition.fileRootNot) {
-				replaceRules.push({
+				rules.push({
 					kind: 'appendDirName',
 					condition: {
 						kind: 'fileRootNotEqual',
@@ -98,19 +100,19 @@ export const buildDeclarativeTransform = (
 		}
 
 		if ('replaceFileRoot' in rule) {
-			replaceRules.push({
+			rules.push({
 				kind: 'replaceFileRoot',
 				value: rule.replaceFileRoot,
 			});
 		}
+
+		return rules;
 	};
 
-	const replaceRules: ReplaceOrCopyRule[] = [];
-	const copyRules: ReplaceOrCopyRule[] = [];
-
-	declarativeFilemod.replaceRules?.forEach((replaceRule) => {
-		handleRule(replaceRule);
-	});
+	const replaceRules: Rule[] =
+		declarativeFilemod.replaceRules?.flatMap((replaceRule) =>
+			handleDeclarativeRule(replaceRule),
+		) ?? [];
 
 	const pathPlatform = path.posix;
 
