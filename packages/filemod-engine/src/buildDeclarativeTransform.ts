@@ -33,6 +33,50 @@ type Rule =
 			value: string;
 	  };
 
+const handleDeclarativeRule = (rule: DeclarativeRule): ReadonlyArray<Rule> => {
+	const rules: Rule[] = [];
+
+	if ('replaceDirectoryName' in rule) {
+		rules.push({
+			kind: 'replaceDirName',
+			fromValue: rule.replaceDirectoryName[0],
+			toValue: rule.replaceDirectoryName[1],
+		});
+	}
+
+	if ('appendDirectoryName' in rule) {
+		const [dirName, condition] = rule.appendDirectoryName;
+
+		if (condition.fileRootNot) {
+			rules.push({
+				kind: 'appendDirName',
+				condition: {
+					kind: 'fileRootNotEqual',
+					value: condition.fileRootNot,
+				},
+				replacement:
+					dirName === '@fileRoot'
+						? {
+								kind: '@fileRoot',
+						  }
+						: {
+								kind: 'value',
+								value: dirName,
+						  },
+			});
+		}
+	}
+
+	if ('replaceFileRoot' in rule) {
+		rules.push({
+			kind: 'replaceFileRoot',
+			value: rule.replaceFileRoot,
+		});
+	}
+
+	return rules;
+};
+
 export const buildDeclarativeTransform = (
 	declarativeFilemod: DeclarativeFilemod,
 ): Transform => {
@@ -63,55 +107,14 @@ export const buildDeclarativeTransform = (
 		}
 	}
 
-	const handleDeclarativeRule = (
-		rule: DeclarativeRule,
-	): ReadonlyArray<Rule> => {
-		const rules: Rule[] = [];
-
-		if ('replaceDirectoryName' in rule) {
-			rules.push({
-				kind: 'replaceDirName',
-				fromValue: rule.replaceDirectoryName[0],
-				toValue: rule.replaceDirectoryName[1],
-			});
-		}
-
-		if ('appendDirectoryName' in rule) {
-			const [dirName, condition] = rule.appendDirectoryName;
-
-			if (condition.fileRootNot) {
-				rules.push({
-					kind: 'appendDirName',
-					condition: {
-						kind: 'fileRootNotEqual',
-						value: condition.fileRootNot,
-					},
-					replacement:
-						dirName === '@fileRoot'
-							? {
-									kind: '@fileRoot',
-							  }
-							: {
-									kind: 'value',
-									value: dirName,
-							  },
-				});
-			}
-		}
-
-		if ('replaceFileRoot' in rule) {
-			rules.push({
-				kind: 'replaceFileRoot',
-				value: rule.replaceFileRoot,
-			});
-		}
-
-		return rules;
-	};
-
-	const replaceRules: Rule[] =
+	const replaceRules =
 		declarativeFilemod.replaceRules?.flatMap((replaceRule) =>
 			handleDeclarativeRule(replaceRule),
+		) ?? [];
+
+	const copyRules =
+		declarativeFilemod.copyRules?.flatMap((copyRule) =>
+			handleDeclarativeRule(copyRule),
 		) ?? [];
 
 	const pathPlatform = path.posix;
