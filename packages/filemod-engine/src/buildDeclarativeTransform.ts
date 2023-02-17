@@ -193,14 +193,16 @@ export const buildDeclarativeTransform = (
 				return;
 			}
 
-			const replacedPath = transformPath(parsedPath, replaceRules);
+			if (replaceRules.length > 0) {
+				const replacedPath = transformPath(parsedPath, replaceRules);
 
-			if (replacedPath !== filePath) {
-				commands.push({
-					kind: 'move',
-					fromPath: filePath,
-					toPath: replacedPath,
-				});
+				if (replacedPath !== filePath) {
+					commands.push({
+						kind: 'move',
+						fromPath: filePath,
+						toPath: replacedPath,
+					});
+				}
 			}
 		});
 
