@@ -6,6 +6,23 @@ import jsYaml from 'js-yaml';
 
 const promisifiedReadFile = promisify(readFile);
 
+const replaceOrCopyRule = S.union(
+	S.struct({
+		replaceDirectoryName: S.tuple(S.string, S.string),
+	}),
+	S.struct({
+		appendDirectoryName: S.tuple(
+			S.string,
+			S.struct({
+				fileRootNot: S.optional(S.string),
+			}),
+		),
+	}),
+	S.struct({
+		replaceFileRoot: S.string,
+	}),
+);
+
 const declarativeFilemodSchema = S.struct({
 	version: S.number,
 	posix: S.boolean,
@@ -16,26 +33,8 @@ const declarativeFilemodSchema = S.struct({
 			fileRoot: S.optional(S.array(S.string)),
 		}),
 	),
-	replaceRules: S.optional(
-		S.array(
-			S.union(
-				S.struct({
-					replaceDirectoryName: S.tuple(S.string, S.string),
-				}),
-				S.struct({
-					appendDirectoryName: S.tuple(
-						S.string,
-						S.struct({
-							fileRootNot: S.optional(S.string),
-						}),
-					),
-				}),
-				S.struct({
-					replaceFileRoot: S.string,
-				}),
-			),
-		),
-	),
+	replaceRules: S.optional(S.array(replaceOrCopyRule)),
+	copyRules: S.optional(S.array(replaceOrCopyRule)),
 });
 
 export type DeclarativeFilemod = S.Infer<typeof declarativeFilemodSchema>;

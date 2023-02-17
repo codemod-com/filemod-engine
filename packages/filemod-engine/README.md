@@ -52,6 +52,7 @@ You need to define the following properties:
 * `excludePattern` - the glob pattern to run against the root directory path for exclusion of file paths
 * `deleteRules` - the union of rules that tell whether to remove the files or not
 * `replaceRules` - the ordered list of rules that modify the filePath
+* `copyRules` - the ordered list of rules that create the copy path for the filePath
 * `tests` - the set of tests for patterns
 
 ### How to work on paths?
