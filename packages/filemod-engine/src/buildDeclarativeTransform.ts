@@ -155,10 +155,10 @@ export const buildDeclarativeTransform = (
 			handleDeclarativeRule(replaceRule),
 		) ?? [];
 
-	// const copyRules =
-	// 	declarativeFilemod.copyRules?.flatMap((copyRule) =>
-	// 		handleDeclarativeRule(copyRule),
-	// 	) ?? [];
+	const copyRules =
+		declarativeFilemod.copyRules?.flatMap((copyRule) =>
+			handleDeclarativeRule(copyRule),
+		) ?? [];
 
 	const pathPlatform = path.posix;
 
@@ -201,6 +201,18 @@ export const buildDeclarativeTransform = (
 						kind: 'move',
 						fromPath: filePath,
 						toPath: replacedPath,
+					});
+				}
+			}
+
+			if (copyRules.length > 0) {
+				const copyPath = transformPath(parsedPath, replaceRules);
+
+				if (copyPath !== filePath) {
+					commands.push({
+						kind: 'copy',
+						fromPath: filePath,
+						toPath: copyPath,
 					});
 				}
 			}

@@ -6,7 +6,7 @@ export type Command = Readonly<
 			path: string;
 	  }
 	| {
-			kind: 'move';
+			kind: 'move' | 'copy';
 			fromPath: string;
 			toPath: string;
 	  }
