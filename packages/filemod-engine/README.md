@@ -80,9 +80,9 @@ The `fileRoot` equals rule delete a file path if any of the provided labels matc
         - '_document'
         - '_error'
 
-### Replace Rules
+### Replace/Copy Rules
 
-Each replace rule with have a read/write access to all the 4 path properties mentioned before. Each rule is executed in the declaration order.
+Each replace/copy rule with have a read/write access to all the 4 path properties mentioned before. Each rule is executed in the declaration order.
 
 The `replaceDirectoryName` rule replaces any directory Name that matches the 0th literal with the 1st literal. Check the example below:
     

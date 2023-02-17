@@ -136,7 +136,7 @@ describe('declarativeFilemodWorker', function () {
 		assert.deepEqual(commands, [
 			{
 				fromPath: '/opt/project/pages/[slug]/about.tsx',
-				kind: 'copy',
+				kind: 'move',
 				toPath: '/opt/project/app/[slug]/about/page.tsx',
 			},
 		]);
