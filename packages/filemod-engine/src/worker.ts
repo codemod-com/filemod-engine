@@ -69,7 +69,8 @@ export const executeCommand = async (
 			return;
 		}
 
-		case 'move': {
+		case 'move':
+		case 'copy': {
 			const dir = api.dirname(command.toPath);
 
 			await api.mkdir(dir);
@@ -89,7 +90,9 @@ export const executeCommand = async (
 				);
 			});
 
-			await api.unlink(command.fromPath);
+			if (command.kind === 'move') {
+				await api.unlink(command.fromPath);
+			}
 
 			return;
 		}
