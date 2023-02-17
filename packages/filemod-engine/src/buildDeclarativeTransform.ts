@@ -1,5 +1,5 @@
 import path from 'node:path';
-import { DeclarativeFilemod } from './buildDeclarativeFilemod';
+import { DeclarativeFilemod, DeclarativeRule } from './buildDeclarativeFilemod';
 import { Command, Transform } from './types';
 
 type DeleteRule = {
@@ -7,7 +7,7 @@ type DeleteRule = {
 	value: string;
 };
 
-type ReplaceRule =
+type ReplaceOrCopyRule =
 	| {
 			kind: 'replaceDirName';
 			fromValue: string;
@@ -63,21 +63,19 @@ export const buildDeclarativeTransform = (
 		}
 	}
 
-	const replaceRules: ReplaceRule[] = [];
-
-	declarativeFilemod.replaceRules?.forEach((replaceRule) => {
-		if ('replaceDirectoryName' in replaceRule) {
-			replaceRule.replaceDirectoryName;
+	const handleDeclarativeRule = (rule: DeclarativeRule) => {
+		if ('replaceDirectoryName' in rule) {
+			rule.replaceDirectoryName;
 
 			replaceRules.push({
 				kind: 'replaceDirName',
-				fromValue: replaceRule.replaceDirectoryName[0],
-				toValue: replaceRule.replaceDirectoryName[1],
+				fromValue: rule.replaceDirectoryName[0],
+				toValue: rule.replaceDirectoryName[1],
 			});
 		}
 
-		if ('appendDirectoryName' in replaceRule) {
-			const [dirName, condition] = replaceRule.appendDirectoryName;
+		if ('appendDirectoryName' in rule) {
+			const [dirName, condition] = rule.appendDirectoryName;
 
 			if (condition.fileRootNot) {
 				replaceRules.push({
@@ -99,12 +97,19 @@ export const buildDeclarativeTransform = (
 			}
 		}
 
-		if ('replaceFileRoot' in replaceRule) {
+		if ('replaceFileRoot' in rule) {
 			replaceRules.push({
 				kind: 'replaceFileRoot',
-				value: replaceRule.replaceFileRoot,
+				value: rule.replaceFileRoot,
 			});
 		}
+	};
+
+	const replaceRules: ReplaceOrCopyRule[] = [];
+	const copyRules: ReplaceOrCopyRule[] = [];
+
+	declarativeFilemod.replaceRules?.forEach((replaceRule) => {
+		handleRule(replaceRule);
 	});
 
 	const pathPlatform = path.posix;

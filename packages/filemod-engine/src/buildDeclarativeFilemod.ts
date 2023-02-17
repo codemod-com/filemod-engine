@@ -6,7 +6,7 @@ import jsYaml from 'js-yaml';
 
 const promisifiedReadFile = promisify(readFile);
 
-const replaceOrCopyRule = S.union(
+const declarativeRuleSchema = S.union(
 	S.struct({
 		replaceDirectoryName: S.tuple(S.string, S.string),
 	}),
@@ -33,11 +33,12 @@ const declarativeFilemodSchema = S.struct({
 			fileRoot: S.optional(S.array(S.string)),
 		}),
 	),
-	replaceRules: S.optional(S.array(replaceOrCopyRule)),
-	copyRules: S.optional(S.array(replaceOrCopyRule)),
+	replaceRules: S.optional(S.array(declarativeRuleSchema)),
+	copyRules: S.optional(S.array(declarativeRuleSchema)),
 });
 
 export type DeclarativeFilemod = S.Infer<typeof declarativeFilemodSchema>;
+export type DeclarativeRule = S.Infer<typeof declarativeRuleSchema>;
 
 export type BuildDeclarativeFilemodArgument =
 	| Readonly<{
