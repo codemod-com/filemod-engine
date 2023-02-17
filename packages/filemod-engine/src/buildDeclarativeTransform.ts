@@ -1,4 +1,4 @@
-import path from 'node:path';
+import path, { ParsedPath } from 'node:path';
 import { DeclarativeFilemod, DeclarativeRule } from './buildDeclarativeFilemod';
 import { Command, Transform } from './types';
 
@@ -77,6 +77,49 @@ const handleDeclarativeRule = (rule: DeclarativeRule): ReadonlyArray<Rule> => {
 	return rules;
 };
 
+const transformPath = (
+	parsedPath: ParsedPath,
+	rules: ReadonlyArray<Rule>,
+): string => {
+	const { root, base, dir, ext } = parsedPath;
+
+	let fileRoot = base.slice(0, base.length - ext.length);
+	let dirs = dir.split(path.sep);
+
+	rules.forEach((rule) => {
+		if (rule.kind === 'replaceDirName') {
+			dirs = dirs.map((dirName) => {
+				if (dirName !== rule.fromValue) {
+					return dirName;
+				}
+
+				return rule.toValue;
+			});
+		}
+
+		if (rule.kind === 'appendDirName') {
+			if (
+				rule.condition.kind === 'fileRootNotEqual' &&
+				rule.condition.value !== fileRoot
+			) {
+				if (rule.replacement.kind === '@fileRoot') {
+					dirs.push(fileRoot);
+				}
+
+				if (rule.replacement.kind === 'value') {
+					dirs.push(rule.replacement.value);
+				}
+			}
+		}
+
+		if (rule.kind === 'replaceFileRoot') {
+			fileRoot = rule.value;
+		}
+	});
+
+	return path.join(root, ...dirs, `${fileRoot}${ext}`);
+};
+
 export const buildDeclarativeTransform = (
 	declarativeFilemod: DeclarativeFilemod,
 ): Transform => {
@@ -128,9 +171,10 @@ export const buildDeclarativeTransform = (
 		const commands: Command[] = [];
 
 		filePaths.forEach((filePath) => {
-			const { root, base, dir, ext } = pathPlatform.parse(filePath);
+			const parsedPath = pathPlatform.parse(filePath);
+			const { base, ext } = parsedPath;
 
-			let fileRoot = base.slice(0, base.length - ext.length);
+			const fileRoot = base.slice(0, base.length - ext.length);
 
 			const doDelete = deleteRules.some((deleteRule) => {
 				if (deleteRule.kind === 'fileRootEqual') {
@@ -149,44 +193,15 @@ export const buildDeclarativeTransform = (
 				return;
 			}
 
-			let dirs = dir.split(path.sep);
+			const replacedPath = transformPath(parsedPath, replaceRules);
 
-			replaceRules.forEach((replaceRule) => {
-				if (replaceRule.kind === 'replaceDirName') {
-					dirs = dirs.map((dirName) => {
-						if (dirName !== replaceRule.fromValue) {
-							return dirName;
-						}
-
-						return replaceRule.toValue;
-					});
-				}
-
-				if (replaceRule.kind === 'appendDirName') {
-					if (
-						replaceRule.condition.kind === 'fileRootNotEqual' &&
-						replaceRule.condition.value !== fileRoot
-					) {
-						if (replaceRule.replacement.kind === '@fileRoot') {
-							dirs.push(fileRoot);
-						}
-
-						if (replaceRule.replacement.kind === 'value') {
-							dirs.push(replaceRule.replacement.value);
-						}
-					}
-				}
-
-				if (replaceRule.kind === 'replaceFileRoot') {
-					fileRoot = replaceRule.value;
-				}
-			});
-
-			commands.push({
-				kind: 'move',
-				fromPath: filePath,
-				toPath: path.join(root, ...dirs, `${fileRoot}${ext}`),
-			});
+			if (replacedPath !== filePath) {
+				commands.push({
+					kind: 'move',
+					fromPath: filePath,
+					toPath: replacedPath,
+				});
+			}
 		});
 
 		return commands;
