@@ -112,10 +112,10 @@ export const buildDeclarativeTransform = (
 			handleDeclarativeRule(replaceRule),
 		) ?? [];
 
-	const copyRules =
-		declarativeFilemod.copyRules?.flatMap((copyRule) =>
-			handleDeclarativeRule(copyRule),
-		) ?? [];
+	// const copyRules =
+	// 	declarativeFilemod.copyRules?.flatMap((copyRule) =>
+	// 		handleDeclarativeRule(copyRule),
+	// 	) ?? [];
 
 	const pathPlatform = path.posix;
 
